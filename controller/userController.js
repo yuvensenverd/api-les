@@ -27,5 +27,11 @@ module.exports = {
     //Register, Login, KeepLogin, Reset Password / Forgot Password, Change Password, Login Gmail, Login Facebook
     registerUser : (req, res) => {
      
-    }
+    },
+    getStatus:(req,res)=>{
+        
+        console.log(req)
+        console.log(res)
+        console.log('========masuk getStatus =============')
+    },
 }

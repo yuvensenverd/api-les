@@ -5,6 +5,7 @@ var { auth, resetToken } = require('../helpers/auth')
 const { userController } = require('../controller')
 
 router.post('/register', userController.registerUser);
+router.post('/getstatus', userController.getStatus)
 
 
 module.exports = router
