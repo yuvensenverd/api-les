@@ -3,19 +3,12 @@ var express = require('express'),
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-const port = 2019
+const port = 2020
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const bearerToken = require('express-bearer-token');
 const fs = require('fs')
 // require('./scheduler/schedulers')
-
-
-
-
-
-
-
 
 app.use(bodyParser.json())
 app.use(cors())
