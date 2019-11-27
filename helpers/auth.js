@@ -5,7 +5,8 @@ module.exports = {
         //console.log(req.method)
         if (req.method !== "OPTIONS") {
             // let success = true;
-            //console.log(req.token.length)
+            // console.log(req.token.length)
+            console.log("a")
             console.log(req.token)
             jwt.verify(req.token, "ngelesDotComToken", (error, decoded) => {
                 if (error) {
@@ -26,6 +27,7 @@ module.exports = {
         //console.log(req.method)
         if (req.method !== "OPTIONS") {
             // let success = true;
+            console.log('b')
             console.log(req.token.length)
             console.log(req.token)
             jwt.verify(req.token, "ForgotPasswordToken", (error, decoded) => {
