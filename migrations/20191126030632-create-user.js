@@ -20,14 +20,19 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      password: {
+        type : Sequelize.STRING
+      },
       googleId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       facebookId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       isVerified: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,

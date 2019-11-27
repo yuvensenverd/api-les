@@ -11,4 +11,8 @@ router.post('/registerWithFacebook');
 router.post('/loginWithGoogle', userController.loginWithGoogle);
 router.post('/loginWithFacebook', userController.loginWithFacebook);
 
+router.post('/emailVerification', auth, userController.verifyUser)
+router.post('/resendVerification', auth, userController.resendVerification)
+
+
 module.exports = router
