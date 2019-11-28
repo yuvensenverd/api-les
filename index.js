@@ -24,11 +24,13 @@ app.use(bearerToken())
 // const client = require('twilio')();
 
 const {
-    userRouter
+    userRouter,
+    categoryRouter
 } = require('./router')
 
 
 app.use("/user", userRouter)
+app.use('/category', categoryRouter);
 
 
 const accountSid = 'ACe76747951073aa1d89501f528e2f53fa';

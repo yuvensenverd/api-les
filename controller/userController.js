@@ -94,6 +94,26 @@ module.exports = {
      
     //   return res.status(200).send({message : 'success', result })
     },
+
+    keepLogin: (req, res) => {
+        User.findOne({
+            where: {
+                email: req.user.email
+            }
+        })
+        .then((result) => {
+            const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+            return res.status(200).send({
+                result: result.dataValues, 
+                token: tokenJwt
+            })
+        })
+        .catch((err) => {
+            console.log(error)
+            return res.status(500).send({message : 'theres an error', error })
+        })
+    },
+
     verifyUser : (req,res)=>{
         console.log('masuk api')
         console.log(req.user)
@@ -186,10 +206,13 @@ module.exports = {
     },
 
     loginWithGoogle: (req, res) => {
+        let encryptGoogleId = Crypto.createHmac('sha256', 'apingelescoGoogleId_api')
+                                    .update(req.body.data.googleId).digest('hex')
+
         User.findOne({
             where: {
                 email: req.body.data.email,
-                googleId: null,
+                googleId: encryptGoogleId,
 
             }
         })
@@ -198,40 +221,17 @@ module.exports = {
             if(results !== null) {
                 // Kalo sudah pernah mendaftar dengan email google, dan user ingin mencoba
                 // login lewat gmail, maka muncul errornya
-                return res.status(500).send({ status: 'error', message: `Anda sudah pernah mendaftar dengan Email = ${req.body.data.email}`})
-            } else {
-                // console.log('Testing')
-            
-                let encryptGoogleId = Crypto.createHmac('sha256', 'apingelescoGoogleId_api')
-                                    .update(req.body.data.googleId).digest('hex')
-                
-                User.findOne({
-                    where: {
-                        email: req.body.data.email,
-                        googleId: encryptGoogleId
-                    }
-                })
-                .then((dataUser) => {
-                    console.log(dataUser)
-                    if(dataUser !== null) {
-                        // Jika ada
-                        // console.log(dataUser.id)
-                        // console.log(dataUser.email)
-                        const tokenJwt = createJWTToken({ userId: dataUser.id, email: dataUser.email })
+
+                const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
 
                         // console.log(dataUser.id)
 
                         return res.status(200).send({
-                            dataUser,
+                            result: results.dataValues,
                             token: tokenJwt,
                         });
-                    } else {
-                        return res.status(500).send({ status: 'error', message: `Anda harus mendaftar dengan klik 'Daftar dengan Gmail' untuk email = ${req.body.data.email}`})
-                    }
-                })
-                .catch((err) => {
-                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
-                })
+            } else {
+                return res.status(500).send({ status: 'error', message: `Anda Harus kebagian Sign Up dan klik tombol Sign Up with Google menggunakan email  = ${req.body.data.email}`})
             }
         })
         .catch((err) => {
@@ -240,15 +240,13 @@ module.exports = {
     },
 
     loginWithFacebook: (req, res) => {
+        let encryptFacebookId = Crypto.createHmac('sha256', 'apingelescoFacebookId_api')
+                                    .update(req.body.data.facebookId).digest('hex')
 
-    },
-
-    registerWithGoogle: (req, res) => {
-        console.log(req.body.data)
         User.findOne({
             where: {
                 email: req.body.data.email,
-                googleId: null,
+                facebookId: encryptFacebookId,
 
             }
         })
@@ -257,6 +255,41 @@ module.exports = {
             if(results !== null) {
                 // Kalo sudah pernah mendaftar dengan email google, dan user ingin mencoba
                 // login lewat gmail, maka muncul errornya
+
+                const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
+
+                        // console.log(dataUser.id)
+
+                        return res.status(200).send({
+                            result: results.dataValues,
+                            token: tokenJwt,
+                        });
+            } else {
+                return res.status(500).send({ status: 'error', message: `Anda Harus kebagian Sign Up dan klik tombol Sign Up with Facebook menggunakan email  = ${req.body.data.email}`})
+            }
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        })
+    },
+
+    registerWithGoogle: (req, res) => {
+       
+        let encryptGoogleId = Crypto.createHmac('sha256', 'apingelescoGoogleId_api')
+                                    .update(req.body.data.googleId).digest('hex')
+
+        User.findOne({
+            where: {
+                email: req.body.data.email,
+                googleId: encryptGoogleId,
+
+            }
+        })
+        .then((results) => {
+            console.log(results)
+            if(results !== null) {
+                // Kalo sudah pernah mendaftar dengan email Facebook, dan user ingin mencoba
+                // login lewat gmail, maka muncul errornya
                 return res.status(500).send({ status: 'error', message: `Anda sudah pernah mendaftar dengan Email = ${req.body.data.email}`})
             } else {
                 // console.log('Testing')
@@ -264,67 +297,84 @@ module.exports = {
                 let encryptGoogleId = Crypto.createHmac('sha256', 'apingelescoGoogleId_api')
                                     .update(req.body.data.googleId).digest('hex')
 
-                                    console.log(encryptGoogleId)
-                
-                User.findOne({
-                    where: {
-                        email: req.body.data.email,
-                        googleId: encryptGoogleId
-                    }
-                })
-                .then((dataUser) => {
-                    console.log(dataUser)
-                    if(dataUser !== null) {
-                        console.log('Masuk ke dataUser')
-                        // Jika ada
-                        // console.log(dataUser.id)
-                        // console.log(dataUser.email)
-                        const tokenJwt = createJWTToken({ userId: dataUser.id, email: dataUser.email })
 
-                        // console.log(dataUser.id)
+                console.log('Masuk ke sini')
+                // Jika belum ada
+                req.body.data.googleId = encryptGoogleId
+                // req.body.data.role = 'User'
+                req.body.data.isVerified = 1
+                req.body.data.userImage = '/defaultPhoto/defaultUser.png'
+                req.body.data.phone = '0'
+
+                User.create(req.body.data)
+                .then((results) => {
+
+                    console.log(results.dataValues)
+                        const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
 
                         return res.status(200).send({
-                            dataUser,
-                            token: tokenJwt,
+                            result: results.dataValues,
+                            token: tokenJwt
                         });
-                    } else {
-                        console.log('Masuk ke sini')
-                        // Jika belum ada
-                        req.body.data.googleId = encryptGoogleId
-                        // req.body.data.role = 'User'
-                        req.body.data.isVerified = 1
-                        req.body.data.userImage = '/defaultPhoto/defaultUser.png'
-                        req.body.data.phone = '0'
-
-                        User.create(req.body.data)
-                        .then((results) => {
-
-                            User.findOne({
-                                where: {
-                                    googleId: encryptGoogleId
-                                }
-                            })
-                            .then((dataUserInsert) => {
-                                console.log(dataUserInsert)
-                                const tokenJwt = createJWTToken({ userId: dataUserInsert.id, email: dataUserInsert.email })
-
-                                return res.status(200).send({
-                                    dataUser: dataUserInsert,
-                                    token: tokenJwt
-                                });
-                            })
-                            .catch((err) => {
-                                return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
-                            })
-                        })
-                        .catch((err) => {
-                            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
-
-                        })
-                    }
                 })
                 .catch((err) => {
                     return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+
+                })
+            }
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        })
+    },
+
+    registerWithFacebook: (req, res) => {
+        let encryptFacebookId = Crypto.createHmac('sha256', 'apingelescoFacebookId_api')
+                                    .update(req.body.data.facebookId).digest('hex')
+
+        User.findOne({
+            where: {
+                email: req.body.data.email,
+                facebookId: encryptFacebookId,
+
+            }
+        })
+        .then((results) => {
+            console.log(results)
+            if(results !== null) {
+                // Kalo sudah pernah mendaftar dengan email Facebook, dan user ingin mencoba
+                // login lewat gmail, maka muncul errornya
+                return res.status(500).send({ status: 'error', message: `Anda sudah pernah mendaftar dengan Email = ${req.body.data.email}`})
+            } else {
+                // console.log('Testing')
+            
+                let encryptFacebookId = Crypto.createHmac('sha256', 'apingelescoFacebookId_api')
+                                    .update(req.body.data.facebookId).digest('hex')
+
+                console.log(encryptFacebookId)
+
+                console.log('Masuk ke sini')
+                // Jika belum ada
+                req.body.data.facebookId = encryptFacebookId
+                // req.body.data.role = 'User'
+                req.body.data.isVerified = 1
+                req.body.data.userImage = '/defaultPhoto/defaultUser.png'
+                req.body.data.phone = '0'
+
+                User.create(req.body.data)
+                .then((results) => {
+
+                    console.log(results.dataValues)
+                        const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
+
+                        return res.status(200).send({
+                            result: results.dataValues,
+                            token: tokenJwt
+                        });
+                })
+                .catch((err) => {
+                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+
                 })
             }
         })
