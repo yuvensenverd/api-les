@@ -1,7 +1,7 @@
 
 // const { User, Sequelize, sequelize, School, Project, Payment, Subscription, scholarship, Student } = require('../models');
 // const Op = Sequelize.Op
-const {User, Sequelize} = require('../models');
+const {User, Sequelize, UserInterest} = require('../models');
 const Op = Sequelize.Op;
 const { createJWTToken, createForgotPasswordToken } = require('../helpers/jwtoken');
 const { transporter } = require('../helpers/mailer')
@@ -93,6 +93,44 @@ module.exports = {
       })
      
     //   return res.status(200).send({message : 'success', result })
+    },
+
+    loginUser: (req, res) => {
+        User.findOne({
+            where: {
+                email: req.body.email,
+                // password: Crypto.createHmac('sha256', 'ngelesapi').update(password).digest('hex')
+            }
+        })
+        .then((result) => {
+            if(result.dataValues.googleId) {
+                return res.status(500).send({message : 'theres an error', error : `Gunakan email ini untuk 'Login With Gmail Account' ` })
+            } 
+
+            if(result.dataValues.facebookId) {
+                return res.status(500).send({message : 'theres an error', error : `Gunakan email ini untuk 'Login With Facebook Account' ` })
+            }
+
+            User.findOne({
+                where: {
+                    email: req.body.email,
+                    password:  Crypto.createHmac('sha256', 'ngelesapi').update(req.body.password).digest('hex')
+                }
+            })
+            .then((result) => {
+                const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+                return res.status(200).send({
+                    result: result.dataValues, 
+                    token: tokenJwt
+                })
+            })
+            .catch((err) => {
+                return res.status(500).send({message : 'theres an error', error : `Email tidak terdaftar. Harap Daftar/Sign Up terlebih dahulu ` })
+            })
+        })
+        .catch((err) => {
+            return res.status(500).send({message : 'theres an error', error : `Email tidak terdaftar. Harap Daftar/Sign Up terlebih dahulu ` })
+        })
     },
 
     keepLogin: (req, res) => {
@@ -377,6 +415,25 @@ module.exports = {
 
                 })
             }
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        })
+    },
+
+    subscribeUser: (req, res) => {
+        console.log(req.body)
+        req.body.list = req.body.list.toString();
+
+        UserInterest.create({
+            email: req.body.email,
+            subscribeList: req.body.list
+        })
+        .then((result) => {
+            console.log(result)
+            return res.status(200).send({
+                message: 'success'
+            })
         })
         .catch((err) => {
             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
