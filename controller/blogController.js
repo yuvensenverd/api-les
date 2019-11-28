@@ -41,6 +41,9 @@ module.exports = {
             console.log(err)
             return  res.status(500).send({err})
         }
+    },
+    insertBlog : (req,res) =>{
+
     }
 
 }
