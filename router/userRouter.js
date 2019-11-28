@@ -16,6 +16,8 @@ router.post('/emailVerification', auth, userController.verifyUser)
 router.post('/resendVerification', auth, userController.resendVerification);
 
 router.post('/subscribeList', userController.subscribeUser);
-
+router.post('/sendTokenReset', userController.sendResetPasswordToken);
+router.get('/verifyResetToken', resetToken, userController.userCheckResetToken);
+router.post('/newPasswordUser', resetToken, userController.userResetPassword);
 
 module.exports = router
