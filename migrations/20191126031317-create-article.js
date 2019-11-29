@@ -17,6 +17,9 @@ module.exports = {
       author: {
         type: Sequelize.STRING
       },
+      articleDate : {
+        type : Sequelize.DATETIME
+      },
       categoryId: {
         type: Sequelize.INTEGER
       },

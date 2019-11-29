@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Category.associate = function(models) {
     // associations can be defined here
+    Category.hasOne(models.Article, {foreignKey : 'categoryId'})
   };
   return Category;
 };
