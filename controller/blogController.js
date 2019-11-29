@@ -1,4 +1,4 @@
-const { Article, Sequelize, sequelize, Category } = require('../models');
+const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('../models');
 const Op = Sequelize.Op;
 
 const {uploader} = require('../helpers/uploader')
@@ -51,9 +51,27 @@ module.exports = {
             author,
             description,
             articleDate,
-            categoryId
+            // categoryId
         }).then((result)=>{
-            return res.status(200).send({ message : 'success' , result })
+            console.log(result.dataValues.id)
+            let rowsToInsert = []
+            const articleId = result.dataValues.id
+            for(let i = 0 ; i<categoryId.length; i++){
+                rowsToInsert.push({
+                    articleId,
+                    categoryId : parseInt(categoryId[i])
+                })
+            }
+            
+ 
+            ArticleCategory.bulkCreate(rowsToInsert)
+            .then((results)=>{
+                return res.status(200).send({ message : 'success' , result : results})
+            }).catch((err)=>{
+                console.log(err)
+                return res.status(500).send({ message : 'error', err})
+            })
+     
         }).catch((err)=>{
             return res.status(500).send({ message : "there's an error" , err })
         })
@@ -73,7 +91,18 @@ module.exports = {
         })
     },
     getAllBlog : (req,res) =>{
+        console.log(req.body)
+        var { offset, limit, categoryId } = req.body;
+
+        
+
         Article.findAll({
+            // limit:parseInt(limit),
+            limit:2,
+            // limit : 10,
+            offset:offset,
+            subQuery: true,
+          
             attributes : 
             [
                 'id',
@@ -81,25 +110,91 @@ module.exports = {
                 'description',
                 'author', 
                 'articleDate', 
-                [sequelize.col('Category.name'), 'categoryName'],
+                // [sequelize.col('Categories.name'), 'categoryName'],
+                // [sequelize.col('Categories.id'), 'categoryId'],
+                // [sequelize.col('Category.name'), 'categoryName'],
             ],
             include : [
                 {
                     model : Category,
-                    attributes : []
+        
+                    required : true,
+                    attributes : ['id', 'name'],
+                    through: {
+           
+                        model: ArticleCategory,
+                        limit : 1, // SUPAYA HANYA NGEGET 1 ROW, NGGA NGACAUIN LIMIT DIATAS
+                        // separate : true,
+  
+                        attributes: [],
+                    },
+                    where : {
+                        id : {
+                            [Op.in] :  categoryId
+                        }
+                    }
+
                 }
             ]
             
         })
         .then((result)=>{
             console.log(result)
-            return res.status(200).send({message : 'success get blog' , result})
+            ArticleCategory.count({
+                // distinct : true,
+                distinct: true,
+                col: 'articleId',
+                where : {
+                    categoryId : {
+                        [Op.in] :  categoryId
+                    }
+                },
+            })
+            .then((result2)=>{
+                console.log(result2)
+                return res.status(200).send({message : 'success get blog' , result : result , count : result2})
+            }).catch((error2)=>{
+                console.log(error2)
+                return res.status(500).send({ message : 'theres an error ', error : error2 })
+            })
+
         })
         .catch((error)=>{
             console.log(error)
             return res.status(500).send({ message : 'theres an error ', error })
         })
-    }
+    },
+    // getBlogs : (req,res) =>{
+
+
+    //     Article.findAll({
+          
+    //         attributes : [
+    //             'id',
+    //             'title',
+    //             'description',
+    //             'author', 
+    //             'articleDate', 
+
+    //         ],
+    //         include : [
+    //             {
+    //                 model : ArticleCategory,
+    //                 attributes : [],
+    //                 where : {
+    //                     categoryId : req.body.categoryId
+    //                 } 
+    //             }
+    //         ]
+    //     })
+    //     .then((result)=>{
+    //         return res.status(200).send({ message : 'success get ' , result})
+    //     })
+    //     .catch((error)=>{
+    //         console.log(error)
+    //         return res.status(500).send({ message : 'theres an error ', error })
+    //     })
+    // }
 
 
 }

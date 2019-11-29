@@ -7,7 +7,8 @@ router.post('/GenerateURL', blogController.generateImgUrlquill)
 router.post('/deleteFileQuill', blogController.deleteFileQuill)
 router.post('/insertBlog', blogController.insertBlog)
 router.post('/getBlog', blogController.getBlog)
-router.get('/getAllBlog', blogController.getAllBlog)
+router.post('/getAllBlog', blogController.getAllBlog)
+// router.post('/findBlog', blogController.getBlogs)
 
 
 module.exports = router;
