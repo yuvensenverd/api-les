@@ -4,12 +4,17 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.TEXT, 
     author: DataTypes.STRING,
-    articleDate : DataTypes.DATE,
-    categoryId: DataTypes.INTEGER
+    articleDate : DataTypes.DATE
   }, {});
   Article.associate = function(models) {
     // associations can be defined here
-    Article.belongsTo(models.Category, { foreignKey : 'categoryId'})
+    // Article.belongsTo(models.Category, { foreignKey : 'categoryId'})
+    Article.belongsToMany(models.Category, {
+      through: 'ArticleCategories',
+      // as: 'orders',
+      foreignKey: 'articleId',
+      otherKey: 'categoryId'
+    });
   };
   return Article;
 };

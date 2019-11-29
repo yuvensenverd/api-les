@@ -1,4 +1,4 @@
-const { Article, Sequelize, sequelize, Category } = require('../models');
+const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('../models');
 const Op = Sequelize.Op;
 
 const {uploader} = require('../helpers/uploader')
@@ -51,9 +51,27 @@ module.exports = {
             author,
             description,
             articleDate,
-            categoryId
+            // categoryId
         }).then((result)=>{
-            return res.status(200).send({ message : 'success' , result })
+            console.log(result.dataValues.id)
+            let rowsToInsert = []
+            const articleId = result.dataValues.id
+            for(let i = 0 ; i<categoryId.length; i++){
+                rowsToInsert.push({
+                    articleId,
+                    categoryId : parseInt(categoryId[i])
+                })
+            }
+            
+ 
+            ArticleCategory.bulkCreate(rowsToInsert)
+            .then((results)=>{
+                return res.status(200).send({ message : 'success' , result : results})
+            }).catch((err)=>{
+                console.log(err)
+                return res.status(500).send({ message : 'error', err})
+            })
+     
         }).catch((err)=>{
             return res.status(500).send({ message : "there's an error" , err })
         })
@@ -81,12 +99,20 @@ module.exports = {
                 'description',
                 'author', 
                 'articleDate', 
-                [sequelize.col('Category.name'), 'categoryName'],
+                // [sequelize.col('Category.name'), 'categoryName'],
             ],
             include : [
                 {
                     model : Category,
-                    attributes : []
+                    required : true,
+                    attributes : ['id', 'name'],
+                    through: {
+                        // This block of code allows you to retrieve the properties of the join table
+                        model: ArticleCategory,
+                        // as: 'productOrders',
+                        attributes: [],
+                    }
+
                 }
             ]
             
