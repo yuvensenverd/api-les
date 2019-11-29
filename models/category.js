@@ -9,10 +9,11 @@ module.exports = (sequelize, DataTypes) => {
     // Category.hasOne(models.Article, {foreignKey : 'categoryId'})
     Category.belongsToMany(models.Article, {
       through: 'ArticleCategories',
-      // as: 'orders',
+      // as: 'categories',
       foreignKey: 'categoryId',
       otherKey: 'articleId'
     });
+    // Category.hasMany(models.ArticleCategory, {foreignKey : 'categoryId'})
   };
   return Category;
 };
