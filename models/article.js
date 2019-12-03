@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.TEXT, 
     author: DataTypes.STRING,
-    articleDate : DataTypes.DATE
+    articleDate : DataTypes.DATE,
+    banner : DataTypes.STRING
   }, {});
   Article.associate = function(models) {
     // associations can be defined here

@@ -43,37 +43,52 @@ module.exports = {
         }
     },
     insertBlog : (req,res) =>{
-        console.log(req.body)
-        const { title, author, description,articleDate ,categoryId} =req.body
+        const path = '/post/blog'; //file save path
+        const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]);
 
-        Article.create({
-            title,
-            author,
-            description,
-            articleDate,
-            // categoryId
-        }).then((result)=>{
-            console.log(result.dataValues.id)
-            let rowsToInsert = []
-            const articleId = result.dataValues.id
-            for(let i = 0 ; i<categoryId.length; i++){
-                rowsToInsert.push({
-                    articleId,
-                    categoryId : parseInt(categoryId[i])
-                })
+        upload(req, res, (err) => {
+            if(err){
+                console.log('masuk2')
+                return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
             }
-            
- 
-            ArticleCategory.bulkCreate(rowsToInsert)
-            .then((results)=>{
-                return res.status(200).send({ message : 'success' , result : results})
+
+            const { image } = req.files;
+            console.log(image)
+            const imagePath = image ? path + '/' + image[0].filename : null;
+            console.log(imagePath)
+
+            const { title, author, description,articleDate ,categoryId } = JSON.parse(req.body.data);
+
+            Article.create({
+                title,
+                author,
+                description,
+                articleDate,
+                banner: imagePath
+                // categoryId
+            }).then((result)=>{
+                console.log(result.dataValues.id)
+                let rowsToInsert = []
+                const articleId = result.dataValues.id
+                for(let i = 0 ; i<categoryId.length; i++){
+                    rowsToInsert.push({
+                        articleId,
+                        categoryId : parseInt(categoryId[i])
+                    })
+                }
+                
+    
+                ArticleCategory.bulkCreate(rowsToInsert)
+                .then((results)=>{
+                    return res.status(200).send({ message : 'success' , result : results})
+                }).catch((err)=>{
+                    console.log(err)
+                    return res.status(500).send({ message : 'error', err})
+                })
+        
             }).catch((err)=>{
-                console.log(err)
-                return res.status(500).send({ message : 'error', err})
+                return res.status(500).send({ message : "there's an error" , err })
             })
-     
-        }).catch((err)=>{
-            return res.status(500).send({ message : "there's an error" , err })
         })
     },
     getBlog : (req,res) =>{
