@@ -43,6 +43,7 @@ module.exports = {
         }
     },
     insertBlog : (req,res) =>{
+        console.log(req)
         const path = '/post/blog'; //file save path
         const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]);
 
