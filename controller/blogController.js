@@ -7,11 +7,13 @@ const fs = require('fs')
 
 module.exports = {
     generateImgUrlquill(req,res){
+        console.log(req.query.name.split('.')[0].replace(/ /g, '-'))
+        // console.log(req.body.name)
         const path = '/post/blog'; //file save path
-        const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]); //uploader(path, 'default prefix')
+        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]); //uploader(path, 'default prefix')
 
         upload(req, res, (err) => {
-
+            // console.log(req.body)
             if(err){
                 console.log('masuk2')
                 return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
