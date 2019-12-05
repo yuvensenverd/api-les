@@ -9,6 +9,7 @@ router.post('/deleteFileQuill', blogController.deleteFileQuill);
 router.post('/insertBlog', blogController.insertBlog);
 router.post('/getBlog', blogController.getBlog);
 router.post('/getAllBlog', blogController.getAllBlog);
+router.post('/downloadebook', blogController.downloadEbook);
 // router.post('/findBlog', blogController.getBlogs)
 
 
