@@ -127,6 +127,7 @@ module.exports = {
                 'description',
                 'author', 
                 'articleDate', 
+                'banner'
                 // [sequelize.col('Categories.name'), 'categoryName'],
                 // [sequelize.col('Categories.id'), 'categoryId'],
                 // [sequelize.col('Category.name'), 'categoryName'],
