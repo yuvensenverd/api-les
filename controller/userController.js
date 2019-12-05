@@ -1,7 +1,7 @@
 
 // const { User, Sequelize, sequelize, School, Project, Payment, Subscription, scholarship, Student } = require('../models');
 // const Op = Sequelize.Op
-const {User, Sequelize} = require('../models');
+const {User, Sequelize, UserInterest} = require('../models');
 const Op = Sequelize.Op;
 const { createJWTToken, createForgotPasswordToken } = require('../helpers/jwtoken');
 const { transporter } = require('../helpers/mailer')
@@ -93,6 +93,44 @@ module.exports = {
       })
      
     //   return res.status(200).send({message : 'success', result })
+    },
+
+    loginUser: (req, res) => {
+        User.findOne({
+            where: {
+                email: req.body.email,
+                // password: Crypto.createHmac('sha256', 'ngelesapi').update(password).digest('hex')
+            }
+        })
+        .then((result) => {
+            if(result.dataValues.googleId) {
+                return res.status(500).send({message : 'theres an error', error : `Gunakan email ini untuk 'Login With Gmail Account' ` })
+            } 
+
+            if(result.dataValues.facebookId) {
+                return res.status(500).send({message : 'theres an error', error : `Gunakan email ini untuk 'Login With Facebook Account' ` })
+            }
+
+            User.findOne({
+                where: {
+                    email: req.body.email,
+                    password:  Crypto.createHmac('sha256', 'ngelesapi').update(req.body.password).digest('hex')
+                }
+            })
+            .then((result) => {
+                const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+                return res.status(200).send({
+                    result: result.dataValues, 
+                    token: tokenJwt
+                })
+            })
+            .catch((err) => {
+                return res.status(500).send({message : 'theres an error', error : `Email tidak terdaftar. Harap Daftar/Sign Up terlebih dahulu ` })
+            })
+        })
+        .catch((err) => {
+            return res.status(500).send({message : 'theres an error', error : `Email tidak terdaftar. Harap Daftar/Sign Up terlebih dahulu ` })
+        })
     },
 
     keepLogin: (req, res) => {
@@ -381,5 +419,143 @@ module.exports = {
         .catch((err) => {
             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
         })
-    }
+    },
+
+    subscribeUser: (req, res) => {
+        console.log(req.body)
+        req.body.list = req.body.list.toString();
+
+        UserInterest.create({
+            email: req.body.email,
+            subscribeList: req.body.list
+        })
+        .then((result) => {
+            console.log(result)
+            return res.status(200).send({
+                message: 'success'
+            })
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        })
+    },
+
+    sendResetPasswordToken: (req, res) => {
+        User.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+        .then((result) => {
+            if(result) {
+
+                if(result.dataValues.googleId && result.dataValues.password === null) {
+                    return res.status(500).send({ status: 'gmailTrue', message: `Silahkan Login with Gmail dengan Email = ${req.body.email}` })
+                } 
+
+                if(result.dataValues.facebookId && result.dataValues.password === null) {
+                    return res.status(500).send({ status: 'facebookTrue', message: `Silahkan Login with Facebook dengan Email = ${req.body.email}` })
+                }
+
+                const tokenPassword = createForgotPasswordToken({ userId: result.dataValues.id, email: result.dataValues.email })
+
+                let linkVerifikasi = `${UI_LINK}/verify-reset?token=${tokenPassword}`;
+                                
+                //untuk live
+                //let linkVerifikasi = `https://sharex.purwadhikax.com/verified?t${tokenJwt}`
+        
+                let mailOptions = {
+                    from: 'ngeles.co Admin <operational@ngeles.co>',
+                    to: req.body.email,
+                    subject: 'Link Reset Password for NGELES.CO',
+                    html: `
+                            <div>
+                                <hr />
+                                <h4>Link Reset Password</h4>
+                                <p>Ini adalah Link : <span style='font-weight:bold'>${req.body.email}</span>.</p>
+                                <p>To verification your account <a href='${linkVerifikasi}'>Click Here!</a></p>
+                                <hr />
+                            </div>`
+                }
+
+                transporter.sendMail(mailOptions, (err1, res1) => {
+                    if (err1) {
+                        return res.status(500).send({ status: 'error', err: err1 })
+                    }
+
+                    return res.status(200).send({
+                        token: tokenPassword
+                    });
+
+                })
+
+            } else {
+                return res.status(500).send({ status: 'notFoundEmail', message: 'Email belum terdaftar, harap Register terlebih dahulu' })
+            }
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        })
+    },
+
+    userResetPassword: (req, res) => {
+        let hashPassword = Crypto.createHmac('sha256', 'ngelesapi').update(req.body.password).digest('hex')
+        
+        User.update({
+            password: hashPassword
+        },
+        {
+            where: {
+                email: req.body.email
+            }
+        })
+        .then((results) => {
+            return res.status(200).send(results)
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        })
+    },
+
+    // userChangePassword: (req, res) => {
+    //     // let oldPw = Crypto.createHmac('sha256', 'kasihnusantara_api').update(req.body.oldpw).digest('hex');
+    //     // let newPw = Crypto.createHmac('sha256', 'kasihnusantara_api').update(req.body.newpw).digest('hex');
+
+    //     User.findOne({
+    //         where: {
+    //             email: req.body.email,
+    //             password: oldPw
+    //         }
+    //     })
+    //     .then((results) => {
+    //         if(results) {
+    //             User.update({
+    //                 password: newPw
+
+    //             }, 
+    //             {
+    //                 where: {
+    //                     password: oldPw
+    //                 }
+    //             })
+    //             .then((lastResults) => {
+    //                 return res.status(200).send(results)
+    //             })
+    //             .catch((err) => {
+    //                 return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+    //             })
+    //         } else {
+    //             return res.status(500).json({ message: "Password Lama Anda Salah", error: err.message });
+    //         }
+    //     })
+    //     .catch((err) => {
+    //         return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+    //     })
+    // },
+
+    userCheckResetToken: (req, res) => {
+        let email = req.resetToken.email
+
+        return res.status(200).send(email)
+    },
 }

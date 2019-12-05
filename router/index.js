@@ -5,5 +5,6 @@ const blogRouter = require('./blogRouter');
 
 module.exports = {
     userRouter,
-    categoryRouter
+    categoryRouter,
+    blogRouter
 }

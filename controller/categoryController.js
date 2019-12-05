@@ -4,7 +4,7 @@ const Op = Sequelize.Op;
 module.exports = {
     allCategory: (req, res) => {
         Category.findAll({
-            attributes: [ 'name' , 'image']
+            attributes: [ 'name' , 'image', 'id']
         })
         .then((results) => {
             return res.status(200).send(results)

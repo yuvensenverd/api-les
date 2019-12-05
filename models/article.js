@@ -4,10 +4,19 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.TEXT, 
     author: DataTypes.STRING,
-    categoryId: DataTypes.INTEGER
+    articleDate : DataTypes.DATE,
+    banner : DataTypes.STRING
   }, {});
   Article.associate = function(models) {
     // associations can be defined here
+    // Article.belongsTo(models.Category, { foreignKey : 'categoryId'})
+    Article.belongsToMany(models.Category, {
+      through: 'ArticleCategories',
+      // as: 'articles',
+      foreignKey: 'articleId',
+      otherKey: 'categoryId'
+    });
+    // Article.hasMany(models.ArticleCategory, {foreignKey : 'articleId'})
   };
   return Article;
 };
