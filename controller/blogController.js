@@ -2,7 +2,9 @@ const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('..
 const Op = Sequelize.Op;
 
 const {uploader} = require('../helpers/uploader')
-const fs = require('fs')
+const fs = require('fs');
+var jimp = require('jimp');
+const { URL_API } = require('../helpers/urlapi')
 
 
 module.exports = {
@@ -22,6 +24,9 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+
+           
+
             if(imagePath){
                 return res.status(200).send(imagePath)
             }else{
@@ -58,6 +63,25 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+
+            // read = full url + image pathnya
+            // fs.unlinkSync untuk hapus gambarnya ngarah ke public
+            // write ngarah ke public
+            
+            jimp.read(URL_API + imagePath, (err, image) => {
+                if (err) {
+                    throw err;
+                }
+
+                fs.unlinkSync('public' + imagePath)
+
+                image
+                .resize(1366, jimp.AUTO)
+                .quality(70)
+                .write('public' + imagePath)
+              });
+
+            
 
             const { title, author, description,articleDate ,categoryId } = JSON.parse(req.body.data);
 
