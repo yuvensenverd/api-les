@@ -147,7 +147,7 @@ module.exports = {
             })
         })
         .catch((err) => {
-            console.log(error)
+            console.log(err)
             return res.status(500).send({message : 'theres an error', error })
         })
     },

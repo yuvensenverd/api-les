@@ -69,9 +69,19 @@ io.on('connection', (socket) => {
 
 
 app.get('/', (req, res) => {
-    res.status(200).send(
-        `<h3>NGELES API</h3>`
-    )
+    // res.status(200).send(
+    //     `<h3>NGELES API</h3>`
+    // )
+    // res.download(`${__dirname}/public/upload/bannernol.png`, 'bannernol.png', function (err) {
+    //     if (err) {
+    //       console.log(err)
+    //       return res.status(500).send({ message : 'theres an error ', error : err })
+    //     } else {
+    //       console.log('success')
+    //     //   return res.status(200).send({ message : 'success ' })
+    //     }
+    // })
+    
 })
 
 // const {

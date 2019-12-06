@@ -2,9 +2,12 @@ const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('..
 const Op = Sequelize.Op;
 
 const {uploader} = require('../helpers/uploader')
-const fs = require('fs');
 var jimp = require('jimp');
 const { URL_API } = require('../helpers/urlapi')
+
+var path = require('path')
+var mime = require('mime')
+const fs = require('fs')
 
 
 module.exports = {
@@ -50,6 +53,8 @@ module.exports = {
         }
     },
     insertBlog : (req,res) =>{
+        
+        console.log(req)
         const path = '/post/blog'; //file save path
         const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
 
@@ -139,7 +144,7 @@ module.exports = {
 
         Article.findAll({
             // limit:parseInt(limit),
-            limit:2,
+            limit:limit,
             // limit : 10,
             offset:offset,
             subQuery: true,
@@ -206,6 +211,43 @@ module.exports = {
             return res.status(500).send({ message : 'theres an error ', error })
         })
     },
+    downloadEbook : (req, res) =>{
+
+        console.log(req.body)
+        let file =  `${__dirname}/../public/upload/bannernol.png`;
+        // let file =  `${__dirname}/../public/upload/bannernol.png`;
+     
+        let filename = path.basename(file);
+        console.log(filename)
+        let mimetype = mime.lookup(file);
+        console.log(mimetype)
+
+        res.setHeader('Content-disposition', 'attachment; filename='+filename);
+        res.setHeader('Content-type', mimetype);
+// res.download(__dirname + '/data.xlsx');
+        res.download(`${__dirname}/../public/upload/bannernol.png`, 'bannernol.png',  (err) => {
+            if (err) {
+              console.log(err)
+              return res.status(500).send({ message : 'theres an error ', error : err })
+            } else {
+              console.log('success')
+              return res.status(200).send({ message : 'success ' })
+            }
+        })
+
+        // let file =  `${__dirname}/../public/upload/bannernol.png`;
+
+        // let filename = path.basename(file);
+        // console.log(filename)
+        // let mimetype = mime.lookup(file);
+        // console.log(mimetype)
+      
+        // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+        // res.setHeader('Content-type', mimetype);
+      
+        // let filestream = fs.createReadStream(file);
+        // filestream.pipe(res);
+    }
     // getBlogs : (req,res) =>{
 
 
