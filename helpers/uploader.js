@@ -25,7 +25,7 @@ module.exports = {
                 console.log(file)
                 let originalname = file.originalname;
                 let ext = originalname.split('.');
-                let filename = fileNamePrefix + Date.now() + '.' + ext[ext.length - 1];
+                let filename = fileNamePrefix + '-' + Date.now().toString(36) + Math.random().toString(36).substr(25) + '.' + ext[ext.length - 1];
                 cb(null, filename);
             }
         });
