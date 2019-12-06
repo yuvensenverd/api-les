@@ -118,7 +118,7 @@ module.exports = {
 
         Article.findAll({
             // limit:parseInt(limit),
-            limit:2,
+            limit:limit,
             // limit : 10,
             offset:offset,
             subQuery: true,
@@ -187,8 +187,8 @@ module.exports = {
     downloadEbook : (req, res) =>{
 
         console.log(req.body)
-        // let file =  `${__dirname}/../public/upload/bannernol.png`;
         let file =  `${__dirname}/../public/upload/bannernol.png`;
+        // let file =  `${__dirname}/../public/upload/bannernol.png`;
      
         let filename = path.basename(file);
         console.log(filename)
@@ -204,7 +204,7 @@ module.exports = {
               return res.status(500).send({ message : 'theres an error ', error : err })
             } else {
               console.log('success')
-            //   return res.status(200).send({ message : 'success ' })
+              return res.status(200).send({ message : 'success ' })
             }
         })
 
