@@ -1,5 +1,6 @@
 const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('../models');
 const Op = Sequelize.Op;
+const Crypto = require('crypto');
 
 const {uploader} = require('../helpers/uploader')
 const fs = require('fs')
@@ -44,9 +45,19 @@ module.exports = {
             return  res.status(500).send({err})
         }
     },
-    insertBlog : (req,res) =>{
+    insertBlog : async (req,res) =>{
         const path = '/post/blog'; //file save path
         const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]);
+        let lastId = ''
+        await Article.findOne({
+            attributes:['id'],
+            order: [['createdAt', 'DESC']]
+        }).then((result)=>{
+            lastId=result.id+1
+        })
+        let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(lastId)).digest('hex')
+        console.log('-------->' , lastId, typeof(lastId))
+        console.log('-------->', encryptId)
 
         upload(req, res, (err) => {
             if(err){
@@ -59,14 +70,15 @@ module.exports = {
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
 
-            const { title, author, description,articleDate ,categoryId } = JSON.parse(req.body.data);
+            const { title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
 
             Article.create({
                 title,
                 author,
                 description,
                 articleDate,
-                banner: imagePath
+                banner: imagePath,
+                slug : slug+`-${encryptId}`
                 // categoryId
             }).then((result)=>{
                 console.log(result.dataValues.id)
@@ -97,7 +109,8 @@ module.exports = {
         console.log(req.body)
         Article.findOne({
             where :{
-                id : req.body.id
+                // id : req.body.id,
+                slug : req.body.slug
             }
         }).then((result)=>{
             console.log(result)
@@ -126,7 +139,8 @@ module.exports = {
                 'title',
                 'description',
                 'author', 
-                'articleDate', 
+                'articleDate',
+                'slug'
                 // [sequelize.col('Categories.name'), 'categoryName'],
                 // [sequelize.col('Categories.id'), 'categoryId'],
                 // [sequelize.col('Category.name'), 'categoryName'],
@@ -215,3 +229,4 @@ module.exports = {
 
 
 }
+
