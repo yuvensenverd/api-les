@@ -81,7 +81,7 @@ module.exports = {
                 fs.unlinkSync('public' + imagePath)
 
                 image
-                .resize(1920, jimp.AUTO)
+                .resize(1366, jimp.AUTO)
                 .quality(70)
                 .write('public' + imagePath)
               });
