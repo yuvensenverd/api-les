@@ -3,6 +3,8 @@ const Op = Sequelize.Op;
 const Crypto = require('crypto');
 
 const {uploader} = require('../helpers/uploader')
+var jimp = require('jimp');
+const { URL_API } = require('../helpers/urlapi')
 
 var path = require('path')
 var mime = require('mime')
@@ -26,6 +28,9 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+
+           
+
             if(imagePath){
                 return res.status(200).send(imagePath)
             }else{
@@ -50,7 +55,8 @@ module.exports = {
     },
     insertBlog : async (req,res) =>{
         const path = '/post/blog'; //file save path
-        const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]);
+        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
+        
         let lastId = ''
         await Article.findOne({
             attributes:['id'],
@@ -94,6 +100,23 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+
+            // read = full url + image pathnya
+            // fs.unlinkSync untuk hapus gambarnya ngarah ke public
+            // write ngarah ke public
+            
+            jimp.read(URL_API + imagePath, (err, image) => {
+                if (err) {
+                    throw err;
+                }
+
+                fs.unlinkSync('public' + imagePath)
+
+                image
+                .resize(1366, jimp.AUTO)
+                .quality(70)
+                .write('public' + imagePath)
+              });
 
             const { title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
 
@@ -164,7 +187,8 @@ module.exports = {
                 'title',
                 'description',
                 'author', 
-                'articleDate',
+                'articleDate', 
+                'banner',
                 'slug'
                 // [sequelize.col('Categories.name'), 'categoryName'],
                 // [sequelize.col('Categories.id'), 'categoryId'],
