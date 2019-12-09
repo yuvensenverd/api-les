@@ -1,5 +1,6 @@
 const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('../models');
 const Op = Sequelize.Op;
+const Crypto = require('crypto');
 
 const {uploader} = require('../helpers/uploader')
 
@@ -10,11 +11,13 @@ const fs = require('fs')
 
 module.exports = {
     generateImgUrlquill(req,res){
+        console.log(req.query.name.split('.')[0].replace(/ /g, '-'))
+        // console.log(req.body.name)
         const path = '/post/blog'; //file save path
-        const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]); //uploader(path, 'default prefix')
+        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]); //uploader(path, 'default prefix')
 
         upload(req, res, (err) => {
-
+            // console.log(req.body)
             if(err){
                 console.log('masuk2')
                 return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
@@ -45,17 +48,19 @@ module.exports = {
             return  res.status(500).send({err})
         }
     },
-    insertBlog : (req,res) =>{
-        
-        console.log(req.query)
-        // const pathfile = '/post/ebook'
-        const pathdata = '/post/blog'; //file save path
-        // const type = req.query.ebook ? 'fileimage' : 'image'
-        const uploadfile = uploader(pathdata, 'blog').fields([{
-            name: 'ebook', maxCount: 1
-          }, {
-            name: 'image', maxCount: 1
-        }])
+    insertBlog : async (req,res) =>{
+        const path = '/post/blog'; //file save path
+        const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]);
+        let lastId = ''
+        await Article.findOne({
+            attributes:['id'],
+            order: [['createdAt', 'DESC']]
+        }).then((result)=>{
+            lastId=result.id+1
+        })
+        let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(lastId)).digest('hex')
+        console.log('-------->' , lastId, typeof(lastId))
+        console.log('-------->', encryptId)
 
   
         // const uploaddata = uploader(pathdata, 'blog').fields([{
@@ -90,14 +95,15 @@ module.exports = {
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
 
-            const { title, author, description,articleDate ,categoryId } = JSON.parse(req.body.data);
+            const { title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
 
             Article.create({
                 title,
                 author,
                 description,
                 articleDate,
-                banner: imagePath
+                banner: imagePath,
+                slug : slug+`-${encryptId}`
                 // categoryId
             }).then((result)=>{
                 console.log(result.dataValues.id)
@@ -128,7 +134,8 @@ module.exports = {
         console.log(req.body)
         Article.findOne({
             where :{
-                id : req.body.id
+                // id : req.body.id,
+                slug : req.body.slug
             }
         }).then((result)=>{
             console.log(result)
@@ -157,7 +164,8 @@ module.exports = {
                 'title',
                 'description',
                 'author', 
-                'articleDate', 
+                'articleDate',
+                'slug'
                 // [sequelize.col('Categories.name'), 'categoryName'],
                 // [sequelize.col('Categories.id'), 'categoryId'],
                 // [sequelize.col('Category.name'), 'categoryName'],
@@ -283,3 +291,4 @@ module.exports = {
 
 
 }
+
