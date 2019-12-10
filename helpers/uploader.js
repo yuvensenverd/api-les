@@ -9,9 +9,17 @@ const fs = require('fs');
 module.exports = {
     uploader(destination, fileNamePrefix){
         let defaultPath = './public';
+        console.log(fileNamePrefix)
+        console.log(destination)
         
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
+                console.log(destination)
+                if(file.mimetype === 'application/pdf'){
+                    destination = '/post/ebook'
+                }
+                console.log(req.body)
+                console.log(file)
                 const dir = defaultPath + destination;
                 if (fs.existsSync(dir)) {
                     console.log(dir, "exists")
@@ -23,6 +31,9 @@ module.exports = {
             },
             filename: (req, file, cb) => {
                 console.log(file)
+                if(file.mimetype === 'application/pdf'){
+                    fileNamePrefix = 'Ebook'
+                }
                 let originalname = file.originalname;
                 let ext = originalname.split('.');
                 let filename = fileNamePrefix + '-' + Date.now().toString(36) + Math.random().toString(36).substr(25) + '.' + ext[ext.length - 1];

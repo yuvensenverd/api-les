@@ -68,11 +68,33 @@ module.exports = {
         console.log('-------->' , lastId, typeof(lastId))
         console.log('-------->', encryptId)
 
-        upload(req, res, (err) => {
+  
+        // const uploaddata = uploader(pathdata, 'blog').fields([{
+        //     name: 'image', maxCount: 1
+        // }])
+        // uploader(pathfile, 'PQuill').single()
+
+
+        // if(req.query.ebook === 'true'){
+
+        //     uploadfile(req,res, (err)=>{
+        //         if(err){
+        //             console.log('masuk2')
+        //             console.log(err)
+        //             return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
+        //         }
+        //     })
+        // }
+
+
+        uploadfile(req, res, (err) => {
             if(err){
+                console.log(err)
                 console.log('masuk2')
                 return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
             }
+            console.log('uploaded')
+            console.log(req.body)
 
             const { image } = req.files;
             console.log(image)
