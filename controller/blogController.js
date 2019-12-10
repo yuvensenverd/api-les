@@ -111,7 +111,29 @@ module.exports = {
             where :{
                 // id : req.body.id,
                 slug : req.body.slug
-            }
+            },
+            include : [
+                {
+                    model : Category,
+        
+                    required : true,
+                    attributes : ['id', 'name'],
+                    through: {
+           
+                        model: ArticleCategory,
+                        limit : 1, // SUPAYA HANYA NGEGET 1 ROW, NGGA NGACAUIN LIMIT DIATAS
+                        // separate : true,
+  
+                        attributes: [],
+                    },
+                    // where : {
+                    //     id : {
+                    //         [Op.in] :  categoryId
+                    //     }
+                    // }
+
+                }
+            ]
         }).then((result)=>{
             console.log(result)
             return res.status(200).send({message : 'success get blog' , result})
@@ -128,7 +150,7 @@ module.exports = {
 
         Article.findAll({
             // limit:parseInt(limit),
-            limit:2,
+            // limit:2,
             // limit : 10,
             offset:offset,
             subQuery: true,
