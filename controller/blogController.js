@@ -3,6 +3,11 @@ const Op = Sequelize.Op;
 const Crypto = require('crypto');
 
 const {uploader} = require('../helpers/uploader')
+var jimp = require('jimp');
+const { URL_API } = require('../helpers/urlapi')
+
+var path = require('path')
+var mime = require('mime')
 const fs = require('fs')
 
 
@@ -23,6 +28,9 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+
+           
+
             if(imagePath){
                 return res.status(200).send(imagePath)
             }else{
@@ -47,7 +55,8 @@ module.exports = {
     },
     insertBlog : async (req,res) =>{
         const path = '/post/blog'; //file save path
-        const upload = uploader(path, 'PQuil').fields([{ name: 'image'}]);
+        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
+        
         let lastId = ''
         await Article.findOne({
             attributes:['id'],
@@ -59,16 +68,55 @@ module.exports = {
         console.log('-------->' , lastId, typeof(lastId))
         console.log('-------->', encryptId)
 
-        upload(req, res, (err) => {
+  
+        // const uploaddata = uploader(pathdata, 'blog').fields([{
+        //     name: 'image', maxCount: 1
+        // }])
+        // uploader(pathfile, 'PQuill').single()
+
+
+        // if(req.query.ebook === 'true'){
+
+        //     uploadfile(req,res, (err)=>{
+        //         if(err){
+        //             console.log('masuk2')
+        //             console.log(err)
+        //             return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
+        //         }
+        //     })
+        // }
+
+
+        uploadfile(req, res, (err) => {
             if(err){
+                console.log(err)
                 console.log('masuk2')
                 return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
             }
+            console.log('uploaded')
+            console.log(req.body)
 
             const { image } = req.files;
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+
+            // read = full url + image pathnya
+            // fs.unlinkSync untuk hapus gambarnya ngarah ke public
+            // write ngarah ke public
+            
+            jimp.read(URL_API + imagePath, (err, image) => {
+                if (err) {
+                    throw err;
+                }
+
+                fs.unlinkSync('public' + imagePath)
+
+                image
+                .resize(1366, jimp.AUTO)
+                .quality(70)
+                .write('public' + imagePath)
+              });
 
             const { title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
 
@@ -161,7 +209,8 @@ module.exports = {
                 'title',
                 'description',
                 'author', 
-                'articleDate',
+                'articleDate', 
+                'banner',
                 'slug'
                 // [sequelize.col('Categories.name'), 'categoryName'],
                 // [sequelize.col('Categories.id'), 'categoryId'],
@@ -217,6 +266,43 @@ module.exports = {
             return res.status(500).send({ message : 'theres an error ', error })
         })
     },
+    downloadEbook : (req, res) =>{
+
+        console.log(req.body)
+        let file =  `${__dirname}/../public/upload/bannernol.png`;
+        // let file =  `${__dirname}/../public/upload/bannernol.png`;
+     
+        let filename = path.basename(file);
+        console.log(filename)
+        let mimetype = mime.lookup(file);
+        console.log(mimetype)
+
+        res.setHeader('Content-disposition', 'attachment; filename='+filename);
+        res.setHeader('Content-type', mimetype);
+// res.download(__dirname + '/data.xlsx');
+        res.download(`${__dirname}/../public/upload/bannernol.png`, 'bannernol.png',  (err) => {
+            if (err) {
+              console.log(err)
+              return res.status(500).send({ message : 'theres an error ', error : err })
+            } else {
+              console.log('success')
+              return res.status(200).send({ message : 'success ' })
+            }
+        })
+
+        // let file =  `${__dirname}/../public/upload/bannernol.png`;
+
+        // let filename = path.basename(file);
+        // console.log(filename)
+        // let mimetype = mime.lookup(file);
+        // console.log(mimetype)
+      
+        // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+        // res.setHeader('Content-type', mimetype);
+      
+        // let filestream = fs.createReadStream(file);
+        // filestream.pipe(res);
+    }
     // getBlogs : (req,res) =>{
 
 
