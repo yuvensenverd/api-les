@@ -306,7 +306,8 @@ module.exports = {
                     // }
 
                 }
-            ]
+            ], 
+            order: [['id', 'DESC']]
         }).then((result)=>{
             console.log(result)
             return res.status(200).send({message : 'success get blog' , result})
