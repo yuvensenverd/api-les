@@ -153,6 +153,43 @@ module.exports = {
             })
         })
     },
+    editBlog: (req, res) => {
+        const path = '/post/blog';
+        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name : 'image'}]);
+
+        uploadfile(req,res, (err) => {
+            if(err){
+                console.log(err)
+                console.log('ada error')
+                return res.status(500).json({ message: 'Upload picture failed !', error: err.message})
+            }
+
+            console.log(req.body)
+
+            const { image } = req.files;
+            console.log(image)
+            const imagePath = image ? path + '/' + image[0].filename : null;
+            console.log(imagePath)
+        })
+        const { id,title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
+        let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(id)).digest('hex')
+        Article.update({
+            title, 
+            author,
+            description,
+            banner: imagePath,
+            slug : slug+`-${encryptId}`
+        },{
+            where: {
+                id
+            }
+        })
+        .then((result)=>{
+            console.log(result)
+
+        })
+
+    },
     getBlog : (req,res) =>{
         console.log(req.body)
         Article.findOne({
