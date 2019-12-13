@@ -243,10 +243,11 @@ module.exports = {
                         id : {
                             [Op.in] :  categoryId
                         }
-                    }
-
+                    },
+                    
                 }
-            ]
+            ],
+            order: [['id', 'DESC']]
             
         })
         .then((result)=>{
