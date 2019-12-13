@@ -28,6 +28,22 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
+            console.log(JSON.parse(req.body.data));
+
+         
+            jimp.read(URL_API + imagePath,  (err, image) => {
+                if (err) {
+                    throw err;
+                }
+                console.log('a')
+                console.log(imagePath)
+                 fs.unlinkSync('public' + imagePath)
+                console.log('B')
+                image
+                .resize(1366, jimp.AUTO)
+                .quality(70)
+                .write('public' + imagePath)
+              });
 
            
 
@@ -55,7 +71,12 @@ module.exports = {
     },
     insertBlog : async (req,res) =>{
         const path = '/post/blog'; //file save path
-        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
+        // const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
+        const uploaddata = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{
+            name: 'image', maxCount: 1
+        },{
+            name: 'ebook', maxCount: 1
+        }])
         
         let lastId = ''
         await Article.findOne({
@@ -65,13 +86,11 @@ module.exports = {
             lastId=result.id+1
         })
         let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(lastId)).digest('hex')
-        console.log('-------->' , lastId, typeof(lastId))
-        console.log('-------->', encryptId)
+        // console.log('-------->' , lastId, typeof(lastId))
+        // console.log('-------->', encryptId)
 
   
-        // const uploaddata = uploader(pathdata, 'blog').fields([{
-        //     name: 'image', maxCount: 1
-        // }])
+
         // uploader(pathfile, 'PQuill').single()
 
 
@@ -87,19 +106,30 @@ module.exports = {
         // }
 
 
-        uploadfile(req, res, (err) => {
+        uploaddata(req, res, (err) => {
             if(err){
                 console.log(err)
                 console.log('masuk2')
                 return res.status(500).json({ message: 'Upload picture failed !', error: err.message });
             }
-            console.log('uploaded')
-            console.log(req.body)
+            // console.log('uploaded')
+            // console.log(req.body)
 
-            const { image } = req.files;
+            const { image, ebook } = req.files;
+            console.log(req.files)
+            console.log('ini imej')
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
-            console.log(imagePath)
+
+            // if(image.length > 1){
+            //     const imagePath2 = image ? path + '/' + image[1].filename : null;
+            //     console.log(imagePath2)
+            // }else {
+            //     const imagePath2 = null
+            // }
+
+            const imagePath2 = ebook ? path + '/' + ebook[0].filename : null;
+            
 
             // read = full url + image pathnya
             // fs.unlinkSync untuk hapus gambarnya ngarah ke public
@@ -126,6 +156,7 @@ module.exports = {
                 description,
                 articleDate,
                 banner: imagePath,
+                ebook : imagePath2 ? imagePath2 : null,
                 slug : slug+`-${encryptId}`
                 // categoryId
             }).then((result)=>{

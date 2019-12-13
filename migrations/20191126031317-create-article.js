@@ -23,6 +23,9 @@ module.exports = {
       banner : {
         type : Sequelize.STRING
       },
+      ebook : {
+        type : Sequelize.ST
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

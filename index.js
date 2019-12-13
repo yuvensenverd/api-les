@@ -26,13 +26,16 @@ app.use(bearerToken())
 const {
     userRouter,
     categoryRouter,
-    blogRouter
+    blogRouter,
+    adminRouter
+    
 } = require('./router')
 
 
 app.use("/user", userRouter)
 app.use('/category', categoryRouter);
 app.use('/blog', blogRouter)
+app.use('/admin', adminRouter)
 
 
 // const accountSid = 'ACe76747951073aa1d89501f528e2f53fa';
