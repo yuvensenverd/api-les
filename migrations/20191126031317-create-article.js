@@ -24,7 +24,7 @@ module.exports = {
         type : Sequelize.STRING
       },
       ebook : {
-        type : Sequelize.ST
+        type : Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
