@@ -27,8 +27,9 @@ const {
     userRouter,
     categoryRouter,
     blogRouter,
-    adminRouter
+    adminRouter,
     
+    payment
 } = require('./router')
 
 
@@ -36,6 +37,7 @@ app.use("/user", userRouter)
 app.use('/category', categoryRouter);
 app.use('/blog', blogRouter)
 app.use('/admin', adminRouter)
+app.use('/payment', payment)
 
 
 // const accountSid = 'ACe76747951073aa1d89501f528e2f53fa';
