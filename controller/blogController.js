@@ -2,7 +2,7 @@ const { Article, Sequelize, sequelize, Category, ArticleCategory } = require('..
 const Op = Sequelize.Op;
 const Crypto = require('crypto');
 
-const {uploader} = require('../helpers/uploader')
+const {uploader } = require('../helpers/uploader')
 var jimp = require('jimp');
 const { URL_API } = require('../helpers/urlapi')
 
@@ -56,7 +56,8 @@ module.exports = {
     insertBlog : async (req,res) =>{
         const path = '/post/blog'; //file save path
         const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
-        
+        console.log('-------------------------> insert')
+        console.log(res.body)
         let lastId = ''
         await Article.findOne({
             attributes:['id'],
@@ -86,7 +87,7 @@ module.exports = {
         //     })
         // }
 
-
+        
         uploadfile(req, res, (err) => {
             if(err){
                 console.log(err)
@@ -154,40 +155,97 @@ module.exports = {
         })
     },
     editBlog: (req, res) => {
-        const path = '/post/blog';
-        const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name : 'image'}]);
+        Article.findOne({
+            where:{
+                slug: req.query.slug
+            },
+            attributes: ['slug', 'banner', 'id', 'title']
+        }).then((result1)=>{
+            // console.log(result1.dataValues.banner)
+            if(result1){
+                
+                const path = '/post/blog';
+                const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name : 'image'}]);
+                console.log('---------------------------------->>>>>>>>>>> masuk edit')
+        
+                upload(req,res, (err) => {
+                        if(err){
+                            console.log(err)
+                            console.log('ada error')
+                            return res.status(500).json({ message: 'Upload picture failed !', error: err.message})
+                        }
+            
+                        const { image } = req.files;
+                        const imagePath = image ? path + '/' + image[0].filename : null;
+                        
+                        if(imagePath){
+                            fs.unlinkSync('./public'+ result1.dataValues.banner)
+                        }
+                            
+                    
+                    const { id,title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
+                    let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(id)).digest('hex')
+                    Article.findOne({
+                        where: {
+                            title
+                        },
+                        attributes: ['title']
+                    }).then((result2)=>{
+                        let slugChange = false
+                        if(!result2){
+                            slugChange=true
+                        }
 
-        uploadfile(req,res, (err) => {
-            if(err){
-                console.log(err)
-                console.log('ada error')
-                return res.status(500).json({ message: 'Upload picture failed !', error: err.message})
+                        Article.update({
+                            title, 
+                            author,
+                            description,
+                            banner: imagePath ? imagePath : result1.dataValues.banner,
+                            slug : slugChange ? slug+`-${encryptId}` : slug
+                        },{
+                            where: {
+                                id
+                            }
+                        })
+                        .then((result3)=>{
+                            console.log(result3)
+                            ArticleCategory.destroy({
+                                where: {
+                                    articleId: id
+                                }
+                            }).then((result4)=>{
+                                let rowsToInsert = []
+                                const articleId = id
+                                for(let i = 0 ; i<categoryId.length; i++){
+                                    rowsToInsert.push({
+                                        articleId,
+                                        categoryId : parseInt(categoryId[i])
+                                    })
+                                }
+                                
+                    
+                                ArticleCategory.bulkCreate(rowsToInsert)
+                                .then((results)=>{
+                                    Article.findOne({
+                                        where:{
+                                            id
+                                        },
+                                        attributes: ['slug']
+                                    }).then((result5)=>{
+                                        return res.status(200).send({ message : 'success' , result : result5})
+                                    })
+                                    .catch((err)=>{
+                                        console.log(err)
+                                        return res.status(500).send({ message : 'error', err})
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
             }
-
-            console.log(req.body)
-
-            const { image } = req.files;
-            console.log(image)
-            const imagePath = image ? path + '/' + image[0].filename : null;
-            console.log(imagePath)
         })
-        const { id,title, author, description,articleDate ,categoryId, slug } = JSON.parse(req.body.data);
-        let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(id)).digest('hex')
-        Article.update({
-            title, 
-            author,
-            description,
-            banner: imagePath,
-            slug : slug+`-${encryptId}`
-        },{
-            where: {
-                id
-            }
-        })
-        .then((result)=>{
-            console.log(result)
-
-        })
+        
 
     },
     getBlog : (req,res) =>{
