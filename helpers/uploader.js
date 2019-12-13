@@ -14,12 +14,12 @@ module.exports = {
         
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
-                // console.log(destination)
+                console.log(destination)
                 if(file.mimetype === 'application/pdf'){
                     destination = '/post/ebook'
                 }
-                // console.log(req.body)
-                // console.log(file)
+                console.log(req.body)
+                console.log(file)
                 const dir = defaultPath + destination;
                 if (fs.existsSync(dir)) {
                     console.log(dir, "exists")

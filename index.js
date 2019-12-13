@@ -26,18 +26,25 @@ app.use(bearerToken())
 const {
     userRouter,
     categoryRouter,
+<<<<<<< HEAD
     blogRouter,
     adminRouter,
     
     payment
+=======
+    blogRouter
+>>>>>>> parent of 7db4fb6... Merge remote-tracking branch 'origin/yuvens' into reza
 } = require('./router')
 
 
 app.use("/user", userRouter)
 app.use('/category', categoryRouter);
 app.use('/blog', blogRouter)
+<<<<<<< HEAD
 app.use('/admin', adminRouter)
 app.use('/payment', payment)
+=======
+>>>>>>> parent of 7db4fb6... Merge remote-tracking branch 'origin/yuvens' into reza
 
 
 // const accountSid = 'ACe76747951073aa1d89501f528e2f53fa';

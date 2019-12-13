@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     author: DataTypes.STRING,
     articleDate : DataTypes.DATE,
     banner : DataTypes.STRING,
-    ebook : DataTypes.STRING,
     slug: DataTypes.STRING,
   }, {});
   Article.associate = function(models) {

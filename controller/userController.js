@@ -32,7 +32,6 @@ module.exports = {
               User.create({
                 firstName,
                 lastName,
-                role : 'User',
                 email,
                 password:  Crypto.createHmac('sha256', 'ngelesapi').update(password).digest('hex'),
                 phone,

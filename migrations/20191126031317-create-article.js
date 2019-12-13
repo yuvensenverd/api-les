@@ -23,9 +23,12 @@ module.exports = {
       banner : {
         type : Sequelize.STRING
       },
+<<<<<<< HEAD
       ebook : {
         type : Sequelize.STRING
       },
+=======
+>>>>>>> parent of 7db4fb6... Merge remote-tracking branch 'origin/yuvens' into reza
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
