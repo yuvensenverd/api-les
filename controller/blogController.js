@@ -28,7 +28,7 @@ module.exports = {
             console.log(image)
             const imagePath = image ? path + '/' + image[0].filename : null;
             console.log(imagePath)
-            console.log(JSON.parse(req.body.data));
+            // console.log(JSON.parse(req.body.data));
 
          
             jimp.read(URL_API + imagePath,  (err, image) => {
@@ -209,7 +209,9 @@ module.exports = {
                         const imagePath = image ? path + '/' + image[0].filename : null;
                         
                         if(imagePath){
-                            fs.unlinkSync('./public'+ result1.dataValues.banner)
+                            if(result1.dataValues.banner) {
+                                fs.unlinkSync('./public'+ result1.dataValues.banner)
+                            }
                         }
                             
                     
