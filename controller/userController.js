@@ -426,19 +426,67 @@ module.exports = {
         console.log(req.body)
         req.body.list = req.body.list.toString();
 
-        UserInterest.create({
-            email: req.body.email,
-            subscribeList: req.body.list
+        UserInterest.findOne({
+            where: {
+                email: req.body.email
+            }
         })
         .then((result) => {
-            console.log(result)
-            return res.status(200).send({
-                message: 'success'
-            })
-        })
+            if(result === null) {
+                UserInterest.create({
+                    email: req.body.email,
+                    subscribeList: req.body.list,
+                    role: req.body.role
+                })
+                .then((result) => {
+                    console.log(result)
+                    return res.status(200).send({
+                        message: 'success'
+                    })
+                })
+                .catch((err) => {
+                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+                })
+            } else {
+                UserInterest.update(
+                    {
+                        subscribeList: req.body.list,
+                        role: req.body.role
+                    },
+                    
+                    {
+                        where: {
+                            email: req.body.email
+                        } 
+                    }
+                )
+                .then((result) => {
+                    return res.status(200).send({
+                        message: 'success'
+                    })
+                })
+                .catch((err) => {
+                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+                })
+            }
+        }) 
         .catch((err) => {
             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
         })
+
+        // UserInterest.create({
+        //     email: req.body.email,
+        //     subscribeList: req.body.list
+        // })
+        // .then((result) => {
+        //     console.log(result)
+        //     return res.status(200).send({
+        //         message: 'success'
+        //     })
+        // })
+        // .catch((err) => {
+        //     return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+        // })
     },
 
     sendResetPasswordToken: (req, res) => {
