@@ -338,7 +338,7 @@ module.exports = {
         Article.findAll({
             limit:parseInt(limit),
             // limit:2,
-            // limit : 10,
+            limit : limit,
             offset:offset,
             subQuery: true,
           
