@@ -371,7 +371,7 @@ module.exports = {
                     },
                     where : {
                         id : {
-                            [Op.in] :  categoryId
+                            [categoryId === 'All' ? Op.notIn : Op.in] :  categoryId === 'All' ? ['9999999'] : categoryId
                         }
                     }
 
@@ -387,7 +387,7 @@ module.exports = {
                 col: 'articleId',
                 where : {
                     categoryId : {
-                        [Op.in] :  categoryId
+                        [categoryId === 'All' ? Op.notIn : Op.in] :  categoryId === 'All' ? ['9999999'] : categoryId
                     }
                 },
             })
@@ -408,39 +408,37 @@ module.exports = {
     downloadEbook : (req, res) =>{
 
         console.log(req.body)
-        let file =  `${__dirname}/../public/upload/bannernol.png`;
-        // let file =  `${__dirname}/../public/upload/bannernol.png`;
      
+//         let filename = path.basename(file);
+//         console.log(filename)
+//         let mimetype = mime.lookup(file);
+//         console.log(mimetype)
+
+//         res.setHeader('Content-disposition', 'attachment; filename='+filename);
+//         res.setHeader('Content-type', mimetype);
+// // res.download(__dirname + '/data.xlsx');
+//         res.download(`${__dirname}/../public/upload/Silabus.pdf`, 'Silabus.pdf',  (err) => {
+//             if (err) {
+//               console.log(err)
+//             //   return res.status(500).send({ message : 'theres an error ', error : err })
+//             } else {
+//               console.log('success')
+//             //   return res.status(200).send({ message : 'success ' })
+//             }
+//         })
+
+        let file =  `${__dirname}/../public/upload/bannernol.png`;
+
         let filename = path.basename(file);
         console.log(filename)
         let mimetype = mime.lookup(file);
         console.log(mimetype)
-
-        res.setHeader('Content-disposition', 'attachment; filename='+filename);
+      
+        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
         res.setHeader('Content-type', mimetype);
-// res.download(__dirname + '/data.xlsx');
-        res.download(`${__dirname}/../public/upload/bannernol.png`, 'bannernol.png',  (err) => {
-            if (err) {
-              console.log(err)
-              return res.status(500).send({ message : 'theres an error ', error : err })
-            } else {
-              console.log('success')
-              return res.status(200).send({ message : 'success ' })
-            }
-        })
-
-        // let file =  `${__dirname}/../public/upload/bannernol.png`;
-
-        // let filename = path.basename(file);
-        // console.log(filename)
-        // let mimetype = mime.lookup(file);
-        // console.log(mimetype)
       
-        // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-        // res.setHeader('Content-type', mimetype);
-      
-        // let filestream = fs.createReadStream(file);
-        // filestream.pipe(res);
+        let filestream = fs.createReadStream(file);
+        filestream.pipe(res);
     }
     // getBlogs : (req,res) =>{
 
