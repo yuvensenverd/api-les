@@ -381,7 +381,8 @@ module.exports = {
                     }
 
                 }
-            ]
+            ],
+            order: [['id', 'DESC']]
             
         })
         .then((result)=>{
