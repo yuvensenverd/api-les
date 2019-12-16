@@ -31,20 +31,20 @@ module.exports = {
             // console.log(JSON.parse(req.body.data));
 
          
-            jimp.read(URL_API + imagePath,  (err, image) => {
-                if (err) {
-                    throw err;
-                }
+            // jimp.read(URL_API + imagePath,  (err, image) => {
+            //     if (err) {
+            //         throw err;
+            //     }
 
-                console.log('a')
-                console.log(imagePath)
-                 fs.unlinkSync('public' + imagePath)
-                console.log('B')
-                image
-                .resize(1366, jimp.AUTO)
-                .quality(70)
-                .write('public' + imagePath)
-              });
+            //     console.log('a')
+            //     console.log(imagePath)
+            //      fs.unlinkSync('public' + imagePath)
+            //     console.log('B')
+            //     image
+            //     .resize(1366, jimp.AUTO)
+            //     .quality(70)
+            //     .write('public' + imagePath)
+            //   });
 
            
 
@@ -129,7 +129,9 @@ module.exports = {
             //     const imagePath2 = null
             // }
 
-            const imagePath2 = ebook ? path + '/' + ebook[0].filename : null;
+            let pathEbook = '/post/ebook'
+
+            const imagePath2 = ebook ? pathEbook + '/' + ebook[0].filename : null;
             console.log(imagePath2)
             
 
@@ -217,7 +219,10 @@ module.exports = {
                         console.log(ebook)
                     
                         const imagePath = image ? path + '/' + image[0].filename : null;
-                        const imagePath2 = ebook ? path + '/' + ebook[0].filename : null;
+
+                        let pathEbook = '/post/ebook'
+
+                        const imagePath2 = ebook ? pathEbook + '/' + ebook[0].filename : null;
 
                         console.log(imagePath2)
                         
@@ -408,6 +413,28 @@ module.exports = {
     downloadEbook : (req, res) =>{
 
         console.log(req.body)
+        Article.findOne({
+            where: {
+                id: req.query.id
+            }
+        })
+        .then((result) => {
+            let file =  `${__dirname}/../public/${result.dataValues.ebook}`;
+
+            let filename = path.basename(file);
+            console.log(filename)
+            let mimetype = mime.lookup(file);
+            console.log(mimetype)
+        
+            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+            res.setHeader('Content-type', mimetype);
+        
+            let filestream = fs.createReadStream(file);
+            filestream.pipe(res);
+        })
+        .catch((error) => {
+            return res.status(500).send({ message : 'theres an error ', error })
+        })
      
 //         let filename = path.basename(file);
 //         console.log(filename)
@@ -427,18 +454,18 @@ module.exports = {
 //             }
 //         })
 
-        let file =  `${__dirname}/../public/upload/bannernol.png`;
+        // let file =  `${__dirname}/../public/upload/bannernol.png`;
 
-        let filename = path.basename(file);
-        console.log(filename)
-        let mimetype = mime.lookup(file);
-        console.log(mimetype)
+        // let filename = path.basename(file);
+        // console.log(filename)
+        // let mimetype = mime.lookup(file);
+        // console.log(mimetype)
       
-        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-        res.setHeader('Content-type', mimetype);
+        // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+        // res.setHeader('Content-type', mimetype);
       
-        let filestream = fs.createReadStream(file);
-        filestream.pipe(res);
+        // let filestream = fs.createReadStream(file);
+        // filestream.pipe(res);
     }
     // getBlogs : (req,res) =>{
 
