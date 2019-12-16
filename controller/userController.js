@@ -429,7 +429,7 @@ module.exports = {
         UserInterest.create({
             email: req.body.email,
             subscribeList: req.body.list,
-            role : 'User'
+            // role : 'User' // BELUM ADA ROLENYA
             // role : req.body.role
         })
         .then((result) => {
