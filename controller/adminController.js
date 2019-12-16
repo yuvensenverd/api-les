@@ -60,7 +60,7 @@ module.exports = {
             return res.status(500).send(err)
         })
     },
-    adminGetSubscription : (req,res) =>{
+    adminGetSubscription : (req,res) => {
         UserInterest.findAndCountAll({
             offset:0,
             limit:10,
@@ -72,6 +72,25 @@ module.exports = {
         }).catch(err =>{
             return res.status(500).send(err)
         }) 
+    },
+    adminDeleteArticle : (req,res) => { 
+        console.log('req body')
+        Article.update(
+            {
+                isDeleted: 1
+            },
+            {
+                where: {
+                    id : req.body.id
+                }
+            }
+        ).then((result)=>{
+            console.log(result)
+            return res.status(200).send({message : 'Success! ' , result })
+        }).catch((err)=>{
+            console.log(err)
+            return res.status(500).send({message : 'ERROR', err})
+        })
     }
     
 }
