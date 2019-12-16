@@ -32,7 +32,7 @@ module.exports = {
             filename: (req, file, cb) => {
                 console.log(file)
                 if(file.mimetype === 'application/pdf'){
-                    fileNamePrefix = 'Ebook'
+                    fileNamePrefix = 'Ebook-ngelesco'
                 }
                 let originalname = file.originalname;
                 let ext = originalname.split('.');

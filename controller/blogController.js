@@ -35,6 +35,7 @@ module.exports = {
                 if (err) {
                     throw err;
                 }
+
                 console.log('a')
                 console.log(imagePath)
                  fs.unlinkSync('public' + imagePath)
@@ -129,6 +130,7 @@ module.exports = {
             // }
 
             const imagePath2 = ebook ? path + '/' + ebook[0].filename : null;
+            console.log(imagePath2)
             
 
             // read = full url + image pathnya
@@ -216,6 +218,8 @@ module.exports = {
                     
                         const imagePath = image ? path + '/' + image[0].filename : null;
                         const imagePath2 = ebook ? path + '/' + ebook[0].filename : null;
+
+                        console.log(imagePath2)
                         
                         if(imagePath){
                             if(result1.dataValues.banner) {
