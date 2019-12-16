@@ -14,9 +14,18 @@ var jimp = require('jimp');
 module.exports = {
     adminGetUser : (req,res)=>{
         User.findAndCountAll({
-            attributes : {
-                exclude : ['password', 'googleId', 'facebookId']
-            },
+            attributes : 
+                 [
+                    ['id', 'userId'],
+                    ['firstName', 'Firstname'],
+                    ['lastName', 'Lastname'],
+                    ['email', 'Email'],
+                    ['phone', 'PhoneNumber'],
+                    ['isVerified', 'VerificationStatus'],
+                    ['role', 'UserRole'],
+                    'createdAt'
+                 ]
+            ,
             offset: 0,
             limit: 6,
             order: [['createdAt', 'DESC']]
@@ -27,14 +36,21 @@ module.exports = {
             return res.status(200).send(result)
         })
         .catch(err => {
+            console.log(err)
             return res.status(500).send(err)
         })
     },
     adminGetBlog : (req,res) =>{
         Article.findAndCountAll({
-            attributes : {
-                exclude : ['articleDate', 'banner', 'ebook', 'slug']
-            },
+            attributes : [
+                'id',
+                ['title', 'BlogTitle'],
+                ['author', 'Author'],
+                'createdAt'
+            ]
+                // include : [],
+                // exclude : ['articleDate', 'banner', 'ebook', 'slug', 'description', 'updatedAt']
+            ,
             offset : 0,
             limit : 6,
             order: [['createdAt', 'DESC']]
@@ -47,7 +63,10 @@ module.exports = {
     adminGetSubscription : (req,res) =>{
         UserInterest.findAndCountAll({
             offset:0,
-            limit:10
+            limit:10,
+            attributes : {
+                exclude : ['updatedAt']
+            }
         }).then(result =>{
             return res.status(200).send(result)
         }).catch(err =>{
