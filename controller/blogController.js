@@ -195,18 +195,27 @@ module.exports = {
             if(result1){
                 
                 const path = '/post/blog';
-                const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name : 'image'}]);
+                const uploaddata = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{
+                    name: 'image', maxCount: 1
+                },{
+                    name: 'ebook', maxCount: 1
+                }])
+                // const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name : 'image'}]);
                 console.log('---------------------------------->>>>>>>>>>> masuk edit')
         
-                upload(req,res, (err) => {
+                uploaddata(req,res, (err) => {
                         if(err){
                             console.log(err)
                             console.log('ada error')
                             return res.status(500).json({ message: 'Upload picture failed !', error: err.message})
                         }
-            
-                        const { image } = req.files;
+                        
+                        const { image, ebook } = req.files;
+                        console.log(image)
+                        console.log(ebook)
+                    
                         const imagePath = image ? path + '/' + image[0].filename : null;
+                        const imagePath2 = ebook ? path + '/' + ebook[0].filename : null;
                         
                         if(imagePath){
                             fs.unlinkSync('./public'+ result1.dataValues.banner)
@@ -231,7 +240,8 @@ module.exports = {
                             author,
                             description,
                             banner: imagePath ? imagePath : result1.dataValues.banner,
-                            slug : slugChange ? slug+`-${encryptId}` : slug
+                            slug : slugChange ? slug+`-${encryptId}` : slug,
+                            ebook : imagePath2 ? imagePath2 : null,
                         },{
                             where: {
                                 id
@@ -292,11 +302,8 @@ module.exports = {
                     required : true,
                     attributes : ['id', 'name'],
                     through: {
-           
                         model: ArticleCategory,
-                        limit : 1, // SUPAYA HANYA NGEGET 1 ROW, NGGA NGACAUIN LIMIT DIATAS
-                        // separate : true,
-  
+                        limit : 1,
                         attributes: [],
                     },
                     // where : {
