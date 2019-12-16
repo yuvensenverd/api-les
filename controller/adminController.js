@@ -66,7 +66,8 @@ module.exports = {
             limit:10,
             attributes : {
                 exclude : ['updatedAt']
-            }
+            },
+            order: [['createdAt', 'DESC']]
         }).then(result =>{
             return res.status(200).send(result)
         }).catch(err =>{

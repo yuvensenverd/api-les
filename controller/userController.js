@@ -428,7 +428,9 @@ module.exports = {
 
         UserInterest.create({
             email: req.body.email,
-            subscribeList: req.body.list
+            subscribeList: req.body.list,
+            role : 'User'
+            // role : req.body.role
         })
         .then((result) => {
             console.log(result)
@@ -437,6 +439,7 @@ module.exports = {
             })
         })
         .catch((err) => {
+            console.log(err)
             return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
         })
     },
