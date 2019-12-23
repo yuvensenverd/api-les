@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     phone : DataTypes.STRING,
     address : DataTypes.STRING,
     googleMapName : DataTypes.STRING,
-    googleMapId : DataTypes.INTEGER,
+    googleMapEmbed : DataTypes.INTEGER,
     description : DataTypes.STRING
   }, {});
   Location.associate = function(models) {
