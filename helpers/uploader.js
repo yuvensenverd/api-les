@@ -44,7 +44,7 @@ module.exports = {
                 //     fileNamePrefix = 'IMG'
                 // }
                 if(file.mimetype === 'application/pdf'){
-                    fileNamePrefix = 'Ebook'
+                    fileNamePrefix = 'Ebook-ngelesco'
                 }
                 let originalname = file.originalname;
                 let ext = originalname.split('.');

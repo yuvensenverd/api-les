@@ -61,9 +61,10 @@ module.exports = {
         })
     },
     adminGetSubscription : (req,res) => {
+        console.log(req.body)
         UserInterest.findAndCountAll({
-            offset:0,
-            limit:10,
+            offset: req.body.offset,
+            limit: req.body.limit,
             attributes : {
                 exclude : ['updatedAt']
             },
