@@ -181,9 +181,9 @@ module.exports = {
             console.log(listOfFacilities)
 
            
-            return sequelize.transaction(t => {
-                // chain all your queries here. make sure you return them.
-                return Location.create({
+            return sequelize.transaction(async (t) => {
+
+                let result = await Location.create({
                     name,
                     website,
                     phone,
@@ -191,74 +191,120 @@ module.exports = {
                     description,
                     googleMapName : googleMapName,
                     googleMapId : googleMapId ? googleMapId : null
-                }, {transaction: t}).then(result => {
-                    let data = imageLocationPaths.map((val)=>{
-                        val.locationId = result.id
-                        return val
+                }, {transaction: t})
+
+                let data = imageLocationPaths.map((val)=>{
+                    val.locationId = result.id
+                    return val
+                })
+                await LocationPicture.bulkCreate(data, {transaction : t})
+                console.log('location picture success')
+                let dataRoom = roomData.map((val)=>{
+                    val.locationId = result.id
+                    return val
+                })
+                for(let i = 0 ; i < roomData.length ; i++){
+                    console.log('i is '+ i)
+                    let results = await Room.create(dataRoom[i], {transaction : t})
+                    let facilitiesData = listOfFacilities[i].map((val)=>{
+                        return { roomId : results.id, facilityName : val.facilityName}
                     })
-                    console.log(data)
-                    LocationPicture.bulkCreate(data)
-                    .then((result2) => {
-                        // console.log(result2)
-                        let dataRoom = roomData.map((val)=>{
-                            val.locationId = result.id
-                            return val
-                        })
-                        console.log(dataRoom)
-                        console.log('notes created');
-                        for(let i = 0 ; i < roomData.length ; i++){
-                            console.log('i is ' + i)
-                            Room.create(dataRoom[i])
-                            .then((results)=>{
-                                console.log(listOfFacilities[i])
-                                console.log(listOfRoomImages[i])
-
-                                let facilitiesData = listOfFacilities[i].map((val)=>{
-                                    return { roomId : results.id, facilityName : val.facilityName}
-                                })
-
-                                let roomImagesData = listOfRoomImages[i].map((val)=>{
-                                    return { locationId : result.id, roomId : results.id, imagePath : val.imagePath}
-                                })
-
-                                console.log(facilitiesData)
-                                console.log(roomImagesData)
-
-                                LocationPicture.bulkCreate(roomImagesData)
-                                .then((res)=>{console.log(`success insert images for room ${i}`)})
-                                .catch((err)=>{
-                                    console.log(err)
-                                    throw new Error()})
-                                // console.log({...{roomId : results.id}, ...dataRoom[i]})
-                                RoomFacility.bulkCreate(facilitiesData)
-                                .then((res)=>{console.log(`success insert room facilities for room ${i}`)})
-                                .catch((err)=>{
-                                    console.log(err)
-                                    throw new Error()})
-                            })
-                            .catch((err)=>{
-                                console.log(err)
-                                throw new Error()
-                            })
-
-
-                        }
-                        // console.log('bacot')
-
-
-                        // Room.bulkCreate(roomData, {transaction : t})
-                    }).catch((err)=>{
-                        console.log(err)
-                        throw new Error()
+                    let roomImagesData = listOfRoomImages[i].map((val)=>{
+                        return { locationId : result.id, roomId : results.id, imagePath : val.imagePath}
                     })
-                });
+                    await LocationPicture.bulkCreate(roomImagesData,{transaction : t})
+                    console.log(`success insert images for room ${i}`)
+                    await RoomFacility.bulkCreate(facilitiesData ,{transaction : t})
+                    console.log(`success insert room facilities for room ${i}`)
+                }
+
+                console.log('FINISH')
+
+
+
+
+
+
+
+
+                // chain all your queries here. make sure you return them.
+                // return Location.create({
+                //     name,
+                //     website,
+                //     phone,
+                //     address,
+                //     description,
+                //     googleMapName : googleMapName,
+                //     googleMapId : googleMapId ? googleMapId : null
+                // }, {transaction: t}).then(result => {
+                //     let data = imageLocationPaths.map((val)=>{
+                //         val.locationId = result.id
+                //         return val
+                //     })
+                //     console.log(data)
+                //     LocationPicture.bulkCreate(data)
+                //     .then((result2) => {
+                //         // console.log(result2)
+                //         let dataRoom = roomData.map((val)=>{
+                //             val.locationId = result.id
+                //             return val
+                //         })
+                //         console.log(dataRoom)
+                //         console.log('notes created');
+                //         for(let i = 0 ; i < roomData.length ; i++){
+                //             console.log('i is ' + i)
+                //             Room.create(dataRoom[i])
+                //             .then((results)=>{
+                //                 console.log(listOfFacilities[i])
+                //                 console.log(listOfRoomImages[i])
+
+                //                 let facilitiesData = listOfFacilities[i].map((val)=>{
+                //                     return { roomId : results.id, facilityName : val.facilityName}
+                //                 })
+
+                //                 let roomImagesData = listOfRoomImages[i].map((val)=>{
+                //                     return { locationId : result.id, roomId : results.id, imagePath : val.imagePath}
+                //                 })
+
+                //                 console.log(facilitiesData)
+                //                 console.log(roomImagesData)
+
+                //                 LocationPicture.bulkCreate(roomImagesData)
+                //                 .then((res)=>{console.log(`success insert images for room ${i}`)})
+                //                 .catch((err)=>{
+                //                     console.log(err)
+                //                     throw new Error()})
+                //                 // console.log({...{roomId : results.id}, ...dataRoom[i]})
+                //                 RoomFacility.bulkCreate(facilitiesData)
+                //                 .then((res)=>{console.log(`success insert room facilities for room ${i}`)})
+                //                 .catch((err)=>{
+                //                     console.log(err)
+                //                     throw new Error()})
+                //             })
+                //             .catch((err)=>{
+                //                 console.log(err)
+                //                 throw new Error()
+                //             })
+
+
+                //         }
+                //         // console.log('bacot')
+
+
+                //         // Room.bulkCreate(roomData, {transaction : t})
+                //     }).catch((err)=>{
+                //         console.log(err)
+                //         throw new Error()
+                //     })
+                // });
               
               }).then(result => {
-                  console.log(result)
+                //   console.log(result)
                   console.log('success')
                 // Transaction has been committed
                 // result is whatever the result of the promise chain returned to the transaction callback
               }).catch(err => {
+                  console.log(err)
                 // Transaction has been rolled back
                 // err is whatever rejected the promise chain returned to the transaction callback
               });
