@@ -9,16 +9,32 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull : false,
         type: Sequelize.STRING
       },
-      googleUrl: {
-        type: Sequelize.STRING
+      website : {
+        allowNull : true,
+        type : Sequelize.STRING
+      },
+      phone : {
+        allowNull : false,
+        type : Sequelize.STRING
       },
       address: {
+        allowNull : false,
         type: Sequelize.STRING
       },
-      pictureUrl: {
+      googleMapName: {
+        allowNull : false,
         type: Sequelize.STRING
+      },
+      googleMapId: {
+        allowNull : true,
+        type: Sequelize.INTEGER
+      },
+      description : {
+        allowNull : false,
+        type : Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
