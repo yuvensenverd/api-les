@@ -70,7 +70,7 @@ module.exports = {
             return  res.status(500).send({err})
         }
     },
-    insertBlog : async (req,res) =>{
+    insertBlog : async (req,res) => {
         const path = '/post/blog'; //file save path
         // const upload = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{ name: 'image'}]);
         const uploaddata = uploader(path, `${req.query.name.split('.')[0].replace(/ /g, '-')}`).fields([{
@@ -229,7 +229,21 @@ module.exports = {
                         if(imagePath){
                             if(result1.dataValues.banner) {
                                 fs.unlinkSync('./public'+ result1.dataValues.banner)
+                                
                             }
+
+                            jimp.read(URL_API + imagePath, (err, image) => {
+                                if (err) {
+                                    throw err;
+                                }
+                
+                                fs.unlinkSync('public' + imagePath)
+                
+                                image
+                                .resize(1366, jimp.AUTO)
+                                .quality(70)
+                                .write('public' + imagePath)
+                              });
                         }
                             
                     
