@@ -113,8 +113,7 @@ module.exports = {
             const { imageLocation, roomImage } = req.files;
             console.log(imageLocation, roomImage)
 
-            console.log(JSON.parse(req.body.locationData))
-            console.log(JSON.parse(req.body.roomData))
+            
 
             let imageLocationPaths = []
             let roomImagePaths = []
@@ -138,7 +137,7 @@ module.exports = {
             }
 
             const {
-                name, website, phone, address, description, googleMapName, googleMapId
+                name, website, phone, address, description, googleMapName, googleMapEmbed, slug
             } = JSON.parse(req.body.locationData)
 
             let array = JSON.parse(req.body.roomData)
@@ -190,7 +189,8 @@ module.exports = {
                     address,
                     description,
                     googleMapName : googleMapName,
-                    googleMapId : googleMapId ? googleMapId : null
+                    googleMapEmbed : googleMapEmbed ? googleMapEmbed : null,
+                    slug
                 }, {transaction: t})
 
                 let data = imageLocationPaths.map((val)=>{
@@ -219,13 +219,6 @@ module.exports = {
                 }
 
                 console.log('FINISH')
-
-
-
-
-
-
-
 
                 // chain all your queries here. make sure you return them.
                 // return Location.create({
@@ -301,6 +294,7 @@ module.exports = {
               }).then(result => {
                 //   console.log(result)
                   console.log('success')
+                  return res.status(200).send({message : 'Success! ' })
                 // Transaction has been committed
                 // result is whatever the result of the promise chain returned to the transaction callback
               }).catch(err => {
@@ -309,6 +303,7 @@ module.exports = {
                 // err is whatever rejected the promise chain returned to the transaction callback
               });
         })
-    }
+    },
+
     
 }
