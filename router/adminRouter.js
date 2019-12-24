@@ -8,7 +8,9 @@ const {  adminController  } = require('../controller');
 router.post('/getUser', adminController.adminGetUser)
 router.post('/getBlog', adminController.adminGetBlog)
 router.post('/getSubscription', adminController.adminGetSubscription)
+// router.post('/deleteSubscription', adminController.adminDeleteSubscriber)
 router.post('/deletearticle', adminController.adminDeleteArticle)
+router.post('/insertlocation', adminController.adminInsertLocation)
 
 // router.post('/findBlog', blogController.getBlogs)
 

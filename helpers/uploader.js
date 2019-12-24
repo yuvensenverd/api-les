@@ -15,6 +15,12 @@ module.exports = {
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
                 // console.log(destination)
+                console.log('masukmasukmasuk')
+                // console.log(req)
+                // console.log(file)
+                if(file.fieldname === 'roomImage'){
+                    destination = '/post/roomimages'
+                }
                 if(file.mimetype === 'application/pdf'){
                     destination = '/post/ebook'
                 }
@@ -31,8 +37,14 @@ module.exports = {
             },
             filename: (req, file, cb) => {
                 console.log(file)
+                if(file.fieldname === 'roomImage'){
+                    fileNamePrefix = 'Room'
+                }
+                // if(file.filename === 'imageLocation'){
+                //     fileNamePrefix = 'IMG'
+                // }
                 if(file.mimetype === 'application/pdf'){
-                    fileNamePrefix = 'Ebook'
+                    fileNamePrefix = 'Ebook-ngelesco'
                 }
                 let originalname = file.originalname;
                 let ext = originalname.split('.');
