@@ -3,6 +3,7 @@ const categoryRouter = require('./categoryRouter');
 const blogRouter = require('./blogRouter');
 const adminRouter = require('./adminRouter')
 const payment = require('./paymentRouter')
+const locationRouter = require('./locationRouter')
 
 
 module.exports = {
@@ -10,5 +11,6 @@ module.exports = {
     categoryRouter,
     blogRouter,
     adminRouter,
-    payment
+    payment,
+    locationRouter
 }
