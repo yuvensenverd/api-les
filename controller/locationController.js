@@ -64,4 +64,8 @@ module.exports = {
             console.log(err)
         }
     },
+
+    getAllLocation : (req, res) => {
+        
+    }
 }
