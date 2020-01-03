@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'programId',
       otherKey: 'lecturerId'
     })
-    // Program.hasOne(models.Location, { foreignKey: ''})
+    Program.belongsTo(models.Location, { foreignKey: 'locationId'})
+    Program.belongsTo(models.Room, { foreignKey: 'roomId'})
   };
   return Program;
 };

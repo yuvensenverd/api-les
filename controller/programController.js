@@ -165,7 +165,11 @@ module.exports = {
                         model: LecturerProgram,
                         attributes: [],
                     }
-                }
+                },
+                {
+                    model: Location,
+                    attributes:['name'],
+                },
             ],
             order: [['id', 'DESC']]
         })
@@ -203,15 +207,10 @@ module.exports = {
                 {
                     model: Location,
                     attributes:['name', 'address', 'googleMapName', 'googleMapEmbed'],
-                    include: [
-                        {
-                            model : Room,
-                            required : true,
-                            attributes : {
-                                exclude :   ['createdAt', 'updatedAt']
-                            } ,
-                        }
-                    ]
+                },
+                {
+                    model: Room,
+                    attributes: ['roomName']
                 }
             ],
             where:{
