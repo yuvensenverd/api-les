@@ -1,4 +1,4 @@
-const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram} = require('../models')
+const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room} = require('../models')
 const Op = Sequelize.Op;
 const { uploader } = require('../helpers/uploader')
 const { URL_API } = require('../helpers/urlapi')
@@ -199,6 +199,19 @@ module.exports = {
                         model: LecturerProgram,
                         attributes: [],
                     }
+                },
+                {
+                    model: Location,
+                    attributes:['name', 'address', 'googleMapName', 'googleMapEmbed'],
+                    include: [
+                        {
+                            model : Room,
+                            required : true,
+                            attributes : {
+                                exclude :   ['createdAt', 'updatedAt']
+                            } ,
+                        }
+                    ]
                 }
             ],
             where:{

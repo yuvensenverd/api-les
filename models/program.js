@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'programId',
       otherKey: 'lecturerId'
     })
+    // Program.hasOne(models.Location, { foreignKey: ''})
   };
   return Program;
 };
