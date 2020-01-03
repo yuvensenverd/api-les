@@ -64,8 +64,124 @@ module.exports = {
             console.log(err)
         }
     },
-
-    getAllLocation : (req, res) => {
+    getAll : async (req,res) =>{
+        console.log(req.params.slug)
+        try{
+            
+            let results = await Location.findAll({
+                attributes: {
+                    exclude : ['createdAt', 'updatedAt'],
+                    // include : [
+                    //     [sequelize.col('LocationPictures.imagePath'), 'locationImages'],
+                    // ]
+                },
+                include : [
+                    {
+                        model : LocationPicture,
+                        required : true,
+                        where : {
+                            roomId: {
+                                [Op.eq]: null
+                              },
+                        },
+                        attributes : {
+                            exclude :   ['createdAt', 'updatedAt']
+                        } 
+                    },
+                    {
+                      model : Room,
+                      required : true,
+                      attributes : {
+                          exclude :   ['createdAt', 'updatedAt']
+                      } ,
+                      include : [
+                          {
+                              model : RoomFacility,
+                              required : false,
+                              attributes : {
+                                exclude :   ['createdAt', 'updatedAt']
+                              }
+                          },
+                          {
+                            model : LocationPicture,
+                            required : true,
+                            attributes : {
+                                exclude :   ['createdAt', 'updatedAt']
+                            } 
+                        },
+                      ]
+                    }
+                ]
         
-    }
+                    
+            })
+            console.log(results)
+            return res.status(200).send({message : 'success get', results })
+        }
+
+        catch(err){
+            console.log(err)
+        }
+    },
+    getAllName : async (req,res) =>{
+        console.log(req.params.slug)
+        try{
+            
+            let results = await Location.findAll({
+                attributes: ['id','name'],
+                // {
+                    // exclude : ['createdAt', 'updatedAt'],
+                    // include : [
+                    //     [sequelize.col('LocationPictures.imagePath'), 'locationImages'],
+                    // ]
+                // },
+                include : [
+                    // {
+                    //     model : LocationPicture,
+                    //     required : true,
+                    //     where : {
+                    //         roomId: {
+                    //             [Op.eq]: null
+                    //           },
+                    //     },
+                    //     attributes : {
+                    //         exclude :   ['createdAt', 'updatedAt']
+                    //     } 
+                    // },
+                    {
+                      model : Room,
+                      required : true,
+                      attributes : ['id','roomName']
+                    //   {
+                    //       exclude :   ['createdAt', 'updatedAt']
+                    //   } ,
+                    //   include : [
+                    //       {
+                    //           model : RoomFacility,
+                    //           required : false,
+                    //           attributes : {
+                    //             exclude :   ['createdAt', 'updatedAt']
+                    //           }
+                    //       },
+                    //       {
+                    //         model : LocationPicture,
+                    //         required : true,
+                    //         attributes : {
+                    //             exclude :   ['createdAt', 'updatedAt']
+                    //         } 
+                    //     },
+                    //   ]
+                    }
+                ]
+        
+                    
+            })
+            console.log(results)
+            return res.status(200).send({message : 'success get', results })
+        }
+
+        catch(err){
+            console.log(err)
+        }
+    },
 }

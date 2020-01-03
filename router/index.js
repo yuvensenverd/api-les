@@ -4,6 +4,8 @@ const blogRouter = require('./blogRouter');
 const adminRouter = require('./adminRouter')
 const payment = require('./paymentRouter')
 const locationRouter = require('./locationRouter')
+const programRouter = require('./programRouter');
+const lecturerRouter = require('./lecturerRouter')
 
 
 module.exports = {
@@ -12,5 +14,7 @@ module.exports = {
     blogRouter,
     adminRouter,
     payment,
-    locationRouter
+    locationRouter,
+    programRouter,
+    lecturerRouter
 }
