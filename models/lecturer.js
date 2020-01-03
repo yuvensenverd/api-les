@@ -9,11 +9,16 @@ module.exports = (sequelize, DataTypes) => {
     instagram: DataTypes.STRING,
     website: DataTypes.STRING,
     linkedin: DataTypes.STRING,
-    pictire: DataTypes.STRING,
+    picture: DataTypes.STRING,
     isDeleted: DataTypes.INTEGER
   }, {});
   Lecturer.associate = function(models) {
     // associations can be defined here
+    Lecturer.belongsToMany(models.Program, {
+      through: 'LecturerProgram',
+      foreignKey: 'lecturerId',
+      otherKey: 'programId'
+    })
   };
   return Lecturer;
 };

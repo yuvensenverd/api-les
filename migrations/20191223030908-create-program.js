@@ -15,7 +15,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       lecturerId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Lecturer',
+          key: 'id',
+        }
       },
       pictureId: {
         type: Sequelize.INTEGER

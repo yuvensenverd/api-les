@@ -26,10 +26,18 @@ module.exports = (sequelize, DataTypes) => {
     pageView: DataTypes.INTEGER,
     isCancelled: DataTypes.INTEGER,
     statusNote: DataTypes.STRING,
-    isDeleted: DataTypes.INTEGER
+    isDeleted: DataTypes.INTEGER,
+    classDate: DataTypes.STRING,
+    slug: DataTypes.STRING,
   }, {});
   Program.associate = function(models) {
     // associations can be defined here
+    Program.hasMany(models.programpicture, {foreignKey: 'programId'})
+    Program.belongsToMany(models.Lecturer, {
+      through: 'LecturerProgram',
+      foreignKey: 'programId',
+      otherKey: 'lecturerId'
+    })
   };
   return Program;
 };

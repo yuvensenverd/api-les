@@ -32,7 +32,7 @@ module.exports = {
       linkedin: {
         type: Sequelize.STRING
       },
-      pictire: {
+      picture: {
         type: Sequelize.STRING
       },
       isDeleted: {

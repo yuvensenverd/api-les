@@ -4,6 +4,8 @@ const blogController = require('./blogController');
 const adminController = require('./adminController')
 const paymentController = require('./paymentController')
 const locationController = require('./locationController')
+const programController = require('./programController')
+const lecturerController = require('./lecturerController')
 
 module.exports = {
     userController,
@@ -11,5 +13,7 @@ module.exports = {
     blogController,
     adminController,
     paymentController,
-    locationController
+    locationController,
+    programController,
+    lecturerController
 }

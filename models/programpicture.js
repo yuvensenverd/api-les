@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   programpicture.associate = function(models) {
     // associations can be defined here
+    programpicture.belongsTo(models.Program, { foreignKey: 'programId'})
   };
   return programpicture;
 };
