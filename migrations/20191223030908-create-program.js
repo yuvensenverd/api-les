@@ -16,10 +16,10 @@ module.exports = {
       },
       lecturerId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Lecturer',
-          key: 'id',
-        }
+        // references: {
+        //   model: 'Lecturer',
+        //   key: 'id',
+        // }
       },
       pictureId: {
         type: Sequelize.INTEGER

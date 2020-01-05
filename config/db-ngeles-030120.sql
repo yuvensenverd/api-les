@@ -129,11 +129,11 @@ UNLOCK TABLES;
 -- Dumping data for table `sequelizemeta`
 --
 
-LOCK TABLES `sequelizemeta` WRITE;
+-- LOCK TABLES `sequelizemeta` WRITE;
 /*!40000 ALTER TABLE `sequelizemeta` DISABLE KEYS */;
-INSERT INTO `sequelizemeta` VALUES ('20191126030632-create-user.js'),('20191126030824-create-user-interest.js'),('20191126031048-create-location.js'),('20191126031317-create-article.js'),('20191126031413-create-category.js'),('20191129025855-create-article-category.js'),('20191206023345-add-column-slug-article.js'),('20191218025537-create-room.js'),('20191218025641-create-room-facility.js'),('20191218025734-create-location-picture.js'),('20191223030908-create-program.js'),('20191223033028-create-lecturer.js'),('20191223042744-rename-column-googleMapId-locations.js'),('20191223064424-add-column-slug-locations.js'),('20191223070347-rename-column-googleMapId-locations.js'),('20191223141918-add-column-slug-category.js'),('20191224035222-create-programpicture.js'),('20191227031611-add-column-classDate-program.js'),('20191227033223-add-column-slug-program.js'),('20191229225615-create-lecturer-program.js');
+-- INSERT INTO `sequelizemeta` VALUES ('20191126030632-create-user.js'),('20191126030824-create-user-interest.js'),('20191126031048-create-location.js'),('20191126031317-create-article.js'),('20191126031413-create-category.js'),('20191129025855-create-article-category.js'),('20191206023345-add-column-slug-article.js'),('20191218025537-create-room.js'),('20191218025641-create-room-facility.js'),('20191218025734-create-location-picture.js'),('20191223030908-create-program.js'),('20191223033028-create-lecturer.js'),('20191223042744-rename-column-googleMapId-locations.js'),('20191223064424-add-column-slug-locations.js'),('20191223070347-rename-column-googleMapId-locations.js'),('20191223141918-add-column-slug-category.js'),('20191224035222-create-programpicture.js'),('20191227031611-add-column-classDate-program.js'),('20191227033223-add-column-slug-program.js'),('20191229225615-create-lecturer-program.js');
 /*!40000 ALTER TABLE `sequelizemeta` ENABLE KEYS */;
-UNLOCK TABLES;
+-- UNLOCK TABLES;
 
 --
 -- Dumping data for table `userinterests`
