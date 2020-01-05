@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Location.hasMany(models.LocationPicture, {foreignKey : 'locationId'})
     Location.hasMany(models.Room, {foreignKey : 'locationId'})
+    Location.hasOne(models.Program, {foreignKey: 'locationId'})
   };
   return Location;
 };
