@@ -243,6 +243,8 @@ module.exports = {
         })
     },
     getFilteredClass : (req, res) => {
+        
+        console.log(req.body)
         Program.findAll({
             attributes: {
                 exclude: ['createdAt', 'updatedAt']
