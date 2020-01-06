@@ -65,7 +65,7 @@ module.exports = {
         }
     },
     getAll : async (req,res) =>{
-        console.log(req.params.slug)
+        // console.log(req.params.slug)
         try{
             
             let results = await Location.findAll({
@@ -111,7 +111,8 @@ module.exports = {
                         },
                       ]
                     }
-                ]
+                ],
+                order: [['id', 'DESC']]
         
                     
             })
@@ -124,7 +125,7 @@ module.exports = {
         }
     },
     getAllName : async (req,res) =>{
-        console.log(req.params.slug)
+        // console.log(req.params.slug)
         try{
             
             let results = await Location.findAll({

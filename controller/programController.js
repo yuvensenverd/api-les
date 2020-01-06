@@ -241,5 +241,44 @@ module.exports = {
             console.log(result)
             res.send(result)
         })
+    },
+    getFilteredClass : (req, res) => {
+        Program.findAll({
+            attributes: {
+                exclude: ['createdAt', 'updatedAt']
+            },
+            include: [
+                {
+                    model: programpicture,
+                    attributes: ['programId', 'imagePath']
+                },
+                {
+                    model: Lecturer,
+                    attributes: {
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    through: {
+                        model: LecturerProgram,
+                        attributes: [],
+                    }
+                },
+                {
+                    model: Location,
+                    attributes: ['name'],
+                },
+            ],
+            where: {
+                category: req.params.slug
+            },
+            order: [['id', 'DESC']]
+        })
+            .then((result1) => {
+                console.log(result1)
+                return res.status(200).send(result1)
+            })
+            .catch((err) => {
+                console.log(err)
+                return res.status(500).send({ status: 'error', message: err })
+            })
     }
 }
