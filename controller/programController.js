@@ -224,5 +224,22 @@ module.exports = {
             console.log(error)
             return res.status(500).send({ message : 'theres an error ', error })
         })
+    },
+    getByFilter:(req, res) =>{
+        console.log('masuk get filter')
+        let property = Object.getOwnPropertyNames(req.body)
+        let value = req.body[property]
+        Program.findAll({
+            attributes:{
+                exclude: ['createdAt','updatedAt']
+            },
+            where:{
+                [property]: value
+            }
+        })
+        .then((result)=>{
+            console.log(result)
+            res.send(result)
+        })
     }
 }
