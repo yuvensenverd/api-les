@@ -137,8 +137,9 @@ module.exports = {
             }
 
             const {
-                name, website, phone, address, description, googleMapName, googleMapEmbed, slug
+                name, website, phone, city, address, description, googleMapName, googleMapEmbed, slug
             } = JSON.parse(req.body.locationData)
+
 
             let array = JSON.parse(req.body.roomData)
             let listOfFacilities = []
@@ -190,7 +191,8 @@ module.exports = {
                     description,
                     googleMapName : googleMapName,
                     googleMapEmbed : googleMapEmbed ? googleMapEmbed : null,
-                    slug
+                    slug,
+                    city
                 }, {transaction: t})
 
                 let data = imageLocationPaths.map((val)=>{
