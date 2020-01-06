@@ -282,5 +282,7 @@ module.exports = {
                 console.log(err)
                 return res.status(500).send({ status: 'error', message: err })
             })
-    }
+    }, 
+    
+    
 }
