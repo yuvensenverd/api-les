@@ -11,5 +11,6 @@ router.get('/', (req, res) =>
 
 router.post('/add', programController.createClass)
 router.get('/getAll', programController.getProgram)
+router.get('/filterClass/:slug', programController.getFilteredClass)
 router.post('/getOne', programController.getSelectedProgram)
 module.exports = router;
