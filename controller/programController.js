@@ -113,6 +113,21 @@ module.exports = {
                     .then((result2) => {
                         // console.log(result2)
                         // return res.status(200).send({message: 'success', result: result2})
+                        let lecturerList = []
+                        for(let x=0; x < lecturer.length; x++){
+                            lecturerList.push({
+                                programId,
+                                lecturerId: parseInt(lecturer[x])
+                            })
+                        }
+                        console.log('===============================> lecturerlist ',lecturerList)
+                        LecturerProgram.bulkCreate(lecturerList)
+                        .then((resultx)=>{
+                            return res.status(200).send('data success di simpan')
+                        })
+                        .catch((err)=>{
+                            return res.status(500).send(err)
+                        })
                     })
                     .catch((err)=>{
                         for(let i = 0; i < listgambar.length; i = i + 1) {
@@ -122,19 +137,8 @@ module.exports = {
                         // console.log(err)
                         return res.status(500).send({message: 'error', err})
                     })
-                    let lecturerList = []
-                    for(let x=0; x < lecturer.length; x++){
-                        lecturerList.push({
-                            programId,
-                            lecturerId: parseInt(lecturer[x])
-                        })
-                    }
-                    console.log('===============================> lecturerlist ',lecturerList)
-                    LecturerProgram.bulkCreate(lecturerList)
-                    .catch((err)=>{
-                        return res.status(500).send(err)
-                    })
-                    return res.status(200).send('data success di simpan')
+                    
+                    
                     .catch((err)=>{
                         // console.log(err)
                         return res.status(500).send({ message : 'error', err})
