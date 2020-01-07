@@ -132,6 +132,10 @@ module.exports = {
                     console.log('===============================> lecturerlist ',lecturerList)
                     LecturerProgram.bulkCreate(lecturerList)
                     .catch((err)=>{
+                        return res.status(500).send(err)
+                    })
+                    return res.status(200).send('data success di simpan')
+                    .catch((err)=>{
                         // console.log(err)
                         return res.status(500).send({ message : 'error', err})
                     })

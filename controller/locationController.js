@@ -67,8 +67,10 @@ module.exports = {
     getAll : async (req,res) =>{
         
         try{
+            console.log('====================>>>>>>>>>>>>>>>>>>>>>')
             console.log(req.params.location)    
             if(req.params.location === 'Semua Lokasi') {
+                console.log('==================================> masuk masuk if')
                 let results = await Location.findAll({
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
@@ -128,6 +130,7 @@ module.exports = {
                 return res.status(200).send({ message: 'success get', results })
             
             } else {
+                console.log('==================================> masuk else')
                 let results = await Location.findAll({
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
@@ -200,7 +203,7 @@ module.exports = {
         try{
             
             let results = await Location.findAll({
-                attributes: ['id','name'],
+                attributes: ['id','name', 'city'],
                 // {
                     // exclude : ['createdAt', 'updatedAt'],
                     // include : [
