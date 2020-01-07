@@ -65,13 +65,17 @@ module.exports = {
         }
     },
     getAll : async (req,res) =>{
-        
+        // console.log(req.body)
         try{
-            console.log('====================>>>>>>>>>>>>>>>>>>>>>')
-            console.log(req.params.location)    
-            if(req.params.location === 'Semua Lokasi') {
-                console.log('==================================> masuk masuk if')
+            let {location, category, limit, offset, page} = req.body
+            // console.log(req.body)
+            // console.log(req.params.location) 
+            // console.log(req.params.category)  
+            if(location === 'Semua Lokasi' && category === 'Semua Kategori') {
                 let results = await Location.findAll({
+                    limit,
+                    offset, 
+                    page,
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                         // include : [
@@ -127,11 +131,35 @@ module.exports = {
 
                 })
                 console.log(results)
-                return res.status(200).send({ message: 'success get', results })
+                return res.status(200).send({ message: 'success get', results, total: Math.ceil(results.length / limit) })
             
             } else {
-                console.log('==================================> masuk else')
+                let obj;
+                if(category === 'Semua Kategori') {
+                    obj = {
+                        model: Program,
+                        required: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        }
+                    }
+                } else {
+                    obj = {
+                        model: Program,
+                        required: true,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                        where: {
+                            category
+                        }
+                    }
+                }
+
                 let results = await Location.findAll({
+                    limit,
+                    offset,
+                    page,
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                         // include : [
@@ -139,13 +167,7 @@ module.exports = {
                         // ]
                     },
                     include: [
-                        {
-                            model: Program,
-                            required: true,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            }
-                        },
+                        obj,
                         {
                             model: LocationPicture,
                             required: true,
@@ -182,15 +204,15 @@ module.exports = {
                             ]
                         }
                     ],
-                    where : {
-                        city: req.params.location
+                    where: {
+                        city: location === 'Semua Lokasi' ? { [Op.like] : '%%'} : location
                     },
                     order: [['id', 'DESC']]
 
 
                 })
                 console.log(results)
-                return res.status(200).send({ message: 'success get', results })
+                return res.status(200).send({ message: 'success get', results, total: Math.ceil(results.length / limit)  })
             } 
         }
 
