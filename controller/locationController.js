@@ -68,7 +68,7 @@ module.exports = {
         // console.log(req.body)
         try{
             let {location, category, limit, offset, page} = req.body
-            // console.log(req.body)
+            console.log(req.body)
             // console.log(req.params.location) 
             // console.log(req.params.category)  
             if(location === 'Semua Lokasi' && category === 'Semua Kategori') {
@@ -130,10 +130,13 @@ module.exports = {
 
 
                 })
-                console.log(results)
+                // console.log(results)
                 return res.status(200).send({ message: 'success get', results, total: Math.ceil(results.length / limit) })
             
             } else {
+                console.log('========================= masuk ')
+                let {location, category, limit, offset, page} = req.body
+                console.log(req.body)
                 let obj;
                 if(category === 'Semua Kategori') {
                     obj = {
@@ -151,7 +154,7 @@ module.exports = {
                             exclude: ['createdAt', 'updatedAt']
                         },
                         where: {
-                            category
+                            category: category
                         }
                     }
                 }
@@ -204,14 +207,14 @@ module.exports = {
                             ]
                         }
                     ],
-                    where: {
-                        city: location === 'Semua Lokasi' ? { [Op.like] : '%%'} : location
-                    },
+                    // where: {
+                    //     city: location === 'Semua Lokasi' ? { [Op.like] : '%%'} : location
+                    // },
                     order: [['id', 'DESC']]
 
 
                 })
-                console.log(results)
+                // console.log(results)
                 return res.status(200).send({ message: 'success get', results, total: Math.ceil(results.length / limit)  })
             } 
         }
@@ -284,7 +287,7 @@ module.exports = {
 
     showAvailableCity: (req, res) => {
         Location.findAll({
-            attributes: ['city'],
+            attributes: ['id','city'],
             group: ['city']
         })
             .then((results) => {

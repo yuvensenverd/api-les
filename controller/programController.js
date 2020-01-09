@@ -233,26 +233,60 @@ module.exports = {
             return res.status(500).send({ message : 'theres an error ', error })
         })
     },
+
     getByFilter:(req, res) =>{
         console.log('masuk get filter')
-        let property = Object.getOwnPropertyNames(req.body)
-        let value = req.body[property]
+        let prop = Object.getOwnPropertyNames(req.body)
+        // console.log("properti ---> ", prop)
+        let obj = []
+        for(let i = 0; i< prop.length; i++){
+            console.log(prop[i])
+            obj.push({
+                [prop[i]]:req.body[prop[i]],
+                
+            })
+        }
+
+        console.log(req.body)
+
+        // console.log(obj)
+        let value = req.body[prop]
+        let kota = req.body.city
+        // console.log(req.body)
         Program.findAll({
+            limit:2,
             attributes:{
                 exclude: ['createdAt','updatedAt']
             },
+            include:[
+                {
+                    model: Location,
+                    attributes: {
+                        exclude: ['createdAt','updatedAt']
+                    },
+                    
+                    where:{
+                        city: {
+                            [Op.like]: req.body.city ? req.body.city : '%%'
+                        }
+                    }
+                }
+            ],
             where:{
-                [property]: value
-            }
+                category: req.body.category,
+                
+                // Location.city: {[Op.like]: 'SELATAN'}
+            },
+            // order: [['id', 'A']]
         })
         .then((result)=>{
-            console.log(result)
+            // console.log(result)
             res.send(result)
         })
     },
     getFilteredClass : (req, res) => {
-        
-        console.log(req.body)
+        console.log('-------------------------------------------->>>>>>>>')
+        console.log(req.params)
         Program.findAll({
             attributes: {
                 exclude: ['createdAt', 'updatedAt']
@@ -283,11 +317,11 @@ module.exports = {
             order: [['id', 'DESC']]
         })
             .then((result1) => {
-                console.log(result1)
+                // console.log(result1)
                 return res.status(200).send(result1)
             })
             .catch((err) => {
-                console.log(err)
+                // console.log(err)
                 return res.status(500).send({ status: 'error', message: err })
             })
     }, 
