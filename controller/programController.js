@@ -1,4 +1,4 @@
-const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room} = require('../models')
+const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room, Category, Schedule} = require('../models')
 const Op = Sequelize.Op;
 const { uploader } = require('../helpers/uploader')
 const { URL_API } = require('../helpers/urlapi')
@@ -6,6 +6,7 @@ const Crypto = require('crypto');
 
 var path = require('path')
 var mime = require('mime')
+const moment = require('moment')
 const fs = require('fs')
 
 module.exports = {
@@ -154,13 +155,23 @@ module.exports = {
         })
     },
     getProgram: (req, res)=>{
-        let lecturerId
+        // console.log( moment(new Date(), ["MM-DD-YYYY", "YYYY-MM-DD"]).format())
+        let limit = req.body.limit ? req.body.limit : 1000
+        let offset = req.body.offset ? req.body.offset : 0
+        let categorySelected = req.body.category ? req.body.category : ''
+        let dateSelected = req.body.dateSelected ? req.body.dateSelected : sequelize.fn('NOW') // BLM BENER FORMAT DATENYA
+        console.log(dateSelected)
+        let citySelected = req.body.citySelected ? req.body.citySelected : ''
+        // let getCategory = !req.body.categoryId ? {[Op.like] : ''} : {[Op.in] : req.body.categoryId}
+
+
         Program.findAll({
             attributes:{
                 exclude: ['createdAt','updatedAt']
             },
             limit:parseInt(limit),
             offset:offset,
+            
             include : [
                 {
                     model : programpicture,
@@ -179,8 +190,27 @@ module.exports = {
                 {
                     model: Location,
                     attributes:['name'],
-                },
+                    where : {
+                        city : {
+                            [Op.like] : citySelected
+                        }
+                    }
+                }
+                // {
+                //     model : Schedule,
+                //     attributes : [],
+                //     where : {
+                //         startDate : {
+                //             [Op.gte] : '2020-1-07' // FORMAT DATENYA SISA DIBENERIN OKEE
+                //         }
+                //     }
+                // }
             ],
+            where : {
+                category : {
+                    [Op.like] : '%%'
+                }
+            },
             order: [['id', 'DESC']]
         })
         .then((result1) => {
