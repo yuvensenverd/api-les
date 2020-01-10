@@ -71,7 +71,7 @@ module.exports = {
             // console.log(req.body)
             // console.log(req.params.location) 
             // console.log(req.params.category)  
-            if(location === 'Semua Lokasi' && category === 'Semua Kategori') {
+            if(location === 'Semua Venue' && category === 'Semua Kategori') {
                 let results = await Location.findAll({
                     limit,
                     offset, 
@@ -205,7 +205,7 @@ module.exports = {
                         }
                     ],
                     where: {
-                        city: location === 'Semua Lokasi' ? { [Op.like] : '%%'} : location
+                        city: location === 'Semua Venue' ? { [Op.like] : '%%'} : location
                     },
                     order: [['id', 'DESC']]
 
