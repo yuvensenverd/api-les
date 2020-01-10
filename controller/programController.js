@@ -159,6 +159,8 @@ module.exports = {
             attributes:{
                 exclude: ['createdAt','updatedAt']
             },
+            limit:parseInt(limit),
+            offset:offset,
             include : [
                 {
                     model : programpicture,
