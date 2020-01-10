@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Location.associate = function(models) {
     // associations can be defined here
-    Location.hasMany(models.Program, {foreignKey: 'locationId'})
+    // Location.hasMany(models.Program, {foreignKey: 'locationId'})
     Location.hasMany(models.LocationPicture, {foreignKey : 'locationId'})
     Location.hasMany(models.Room, {foreignKey : 'locationId'})
     Location.hasOne(models.Program, {foreignKey: 'locationId'})
