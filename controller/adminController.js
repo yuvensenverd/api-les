@@ -138,7 +138,7 @@ module.exports = {
             }
 
             let {
-                name, website, phone, city, address, description, googleMapName, googleMapEmbed, slug
+                name, website, phone, city, email, address, description, googleMapName, googleMapEmbed, slug
             } = JSON.parse(req.body.locationData)
 
             city = city.replace('KABUPATEN ', '');
@@ -200,7 +200,8 @@ module.exports = {
                     googleMapName : googleMapName,
                     googleMapEmbed : googleMapEmbed ? googleMapEmbed : null,
                     slug,
-                    city
+                    city,
+                    email
                 }, {transaction: t})
 
                 let data = imageLocationPaths.map((val)=>{

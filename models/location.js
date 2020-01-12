@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     website : DataTypes.STRING,
     phone : DataTypes.STRING,
     city: DataTypes.STRING,
+    email: DataTypes.STRING,
     address : DataTypes.STRING,
     googleMapName : DataTypes.STRING,
     googleMapEmbed : DataTypes.INTEGER,
