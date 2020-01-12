@@ -138,7 +138,7 @@ module.exports = {
                 if(category === 'Semua Kategori') {
                     obj = {
                         model: Program,
-                        required: true,
+                        
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         }
@@ -146,7 +146,7 @@ module.exports = {
                 } else {
                     obj = {
                         model: Program,
-                        required: true,
+                        
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         },
