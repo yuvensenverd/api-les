@@ -19,7 +19,11 @@ module.exports = {
             attributes:['id'],
             order: [['createdAt', 'DESC']]
         }).then((result)=>{
-            lastId=result.id+1
+            if(result === null) {
+                lastId = 1
+            } else {
+                lastId=result.id+1
+            }
         })
         let encryptId = Crypto.createHmac('md5', 'ngelesapi').update(toString(lastId)).digest('hex')
         console.log('-------->' , lastId, typeof(lastId))
@@ -43,7 +47,7 @@ module.exports = {
             console.log('------------------------>>> data')
             console.log(data)
 
-            const {
+            let {
                 category,
                 name,
                 lecturer,
@@ -59,13 +63,37 @@ module.exports = {
                 minimumSeat,
                 maximumSeat,
                 startDateReg,
-                endDateRed,
+                endDateReg,
                 priceInclusive,
                 toPrepare,
                 outCome,
                 slug,
                 language,
             } = data
+
+            classDate = classDate.replace(/\bMonday\b, /g, '');
+            classDate = classDate.replace(/\bTuesday\b, /g, '');
+            classDate = classDate.replace(/\bWednesday\b, /g, '');
+            classDate = classDate.replace(/\bThursday\b, /g, '');
+            classDate = classDate.replace(/\bFriday\b, /g, '');
+            classDate = classDate.replace(/\bSaturday\b, /g, '');
+            classDate = classDate.replace(/\bSunday\b, /g, '');
+
+            startDateReg = startDateReg.replace(/\bMonday\b, /g, '');
+            startDateReg = startDateReg.replace(/\bTuesday\b, /g, '');
+            startDateReg = startDateReg.replace(/\bWednesday\b, /g, '');
+            startDateReg = startDateReg.replace(/\bThursday\b, /g, '');
+            startDateReg = startDateReg.replace(/\bFriday\b, /g, '');
+            startDateReg = startDateReg.replace(/\bSaturday\b, /g, '');
+            startDateReg = startDateReg.replace(/\bSunday\b, /g, '');
+
+            endDateReg = endDateReg.replace(/\bMonday\b, /g, '');
+            endDateReg = endDateReg.replace(/\bTuesday\b, /g, '');
+            endDateReg = endDateReg.replace(/\bWednesday\b, /g, '');
+            endDateReg = endDateReg.replace(/\bThursday\b, /g, '');
+            endDateReg = endDateReg.replace(/\bFriday\b, /g, '');
+            endDateReg = endDateReg.replace(/\bSaturday\b, /g, '');
+            endDateReg = endDateReg.replace(/\bSunday\b, /g, '');
 
             // let languages = language.join('|')
 
@@ -84,7 +112,7 @@ module.exports = {
                     locationId: location,
                     roomId: room,
                     startDateRegister: startDateReg,
-                    lastDateRegister: endDateRed,
+                    lastDateRegister: endDateReg,
                     minimalAge: minimalAge,
                     level,
                     language,

@@ -85,10 +85,10 @@ module.exports = {
                     include: [
                         {
                             model: Program,
-                            required: true,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            }
+                            // required: true,
+                            // attributes: {
+                            //     exclude: ['createdAt', 'updatedAt']
+                            // }
                         },
                         {
                             model: LocationPicture,
