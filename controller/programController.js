@@ -1,4 +1,4 @@
-const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room} = require('../models')
+const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room, Schedule} = require('../models')
 const Op = Sequelize.Op;
 const { uploader } = require('../helpers/uploader')
 const { URL_API } = require('../helpers/urlapi')
@@ -40,7 +40,7 @@ module.exports = {
 
 
             const data = JSON.parse(req.body.data)
-            console.log('------------------------>>> data')
+            console.log('----------------------------------------------------------------------------------->>> data')
             console.log(data)
 
             const {
@@ -92,7 +92,7 @@ module.exports = {
                     priceInclusive,
                     toPrepare,
                     programOutome: outCome,
-                    classDate,
+                    // classDate,
                     slug: `${slug}-${encryptId}`,
                 },{transaction: t})
                 .then((result)=>{
@@ -109,7 +109,7 @@ module.exports = {
                         listgambar.push(imagePath)
                     }
                     console.log(listImage)
-                    programpicture.bulkCreate(listImage)
+                    programpicture.bulkCreate({listImage},{transaction: t})
                     .then((result2) => {
                         // console.log(result2)
                         // return res.status(200).send({message: 'success', result: result2})
@@ -121,9 +121,31 @@ module.exports = {
                             })
                         }
                         console.log('===============================> lecturerlist ',lecturerList)
-                        LecturerProgram.bulkCreate(lecturerList)
+                        LecturerProgram.bulkCreate({lecturerList},{transaction: t})
                         .then((resultx)=>{
-                            return res.status(200).send('data success di simpan')
+                            console.log(lecturer)
+                            console.log(classDate)
+                            let scheduleList = []
+                            console.log(classDate.length)
+                            for(let y = 0; y < classDate.length; y++){
+                                console.log("didalam for", classDate[y].startDate)
+                                scheduleList.push({
+                                    programId,
+                                    startDate: clasDate[y].startDate,
+                                    startTime: clasDate[y].startTime,
+                                    endTime: clasDate[y].endTime
+                                })
+                                console.log(scheduleList)
+                            }
+                            Schedule.bulkCreate({scheduleList},{transaction: t})
+                            console.log('---------------------------------------------> ', scheduleList)
+                            .then((result4) => {
+                                console.log('sukses')
+                                return res.status(200).send('data success di simpan')
+                            })
+                            .catch((err)=>{
+                                return res.status(500).send(err)
+                            })
                         })
                         .catch((err)=>{
                             return res.status(500).send(err)
