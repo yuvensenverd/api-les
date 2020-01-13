@@ -4,6 +4,7 @@ const Crypto = require('crypto');
 
 const {uploader} = require('../helpers/uploader')
 var jimp = require('jimp');
+var _ = require('lodash')
 // const { URL_API } = require('../helpers/urlapi')
 
 // var path = require('path')
@@ -136,10 +137,17 @@ module.exports = {
                 }
             }
 
-            const {
-                name, website, phone, city, address, description, googleMapName, googleMapEmbed, slug
+            let {
+                name, website, phone, city, email, address, description, googleMapName, googleMapEmbed, slug
             } = JSON.parse(req.body.locationData)
 
+            city = city.replace('KABUPATEN ', '');
+            city = city.replace('KOTA ', '');
+            city = city.toLowerCase();
+
+            city = _.startCase(city)
+
+            console.log(city)
 
             let array = JSON.parse(req.body.roomData)
             let listOfFacilities = []
@@ -192,7 +200,8 @@ module.exports = {
                     googleMapName : googleMapName,
                     googleMapEmbed : googleMapEmbed ? googleMapEmbed : null,
                     slug,
-                    city
+                    city,
+                    email
                 }, {transaction: t})
 
                 let data = imageLocationPaths.map((val)=>{

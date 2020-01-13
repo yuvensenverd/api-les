@@ -43,7 +43,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       classDescription: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       locationId: {
         type: Sequelize.INTEGER
@@ -70,13 +70,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       priceInclusive: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       toPrepare: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       programOutome: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       pageView: {
         type: Sequelize.INTEGER
@@ -85,7 +85,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       statusNote: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       isDeleted: {
         type: Sequelize.INTEGER

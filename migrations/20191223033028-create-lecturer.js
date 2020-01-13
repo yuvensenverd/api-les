@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       youtube: {
         type: Sequelize.STRING

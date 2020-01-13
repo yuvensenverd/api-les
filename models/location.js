@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     website : DataTypes.STRING,
     phone : DataTypes.STRING,
     city: DataTypes.STRING,
+    email: DataTypes.STRING,
     address : DataTypes.STRING,
     googleMapName : DataTypes.STRING,
     googleMapEmbed : DataTypes.INTEGER,
@@ -16,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     Location.hasMany(models.Program, {foreignKey: 'locationId'})
     Location.hasMany(models.LocationPicture, {foreignKey : 'locationId'})
     Location.hasMany(models.Room, {foreignKey : 'locationId'})
-    Location.hasOne(models.Program, {foreignKey: 'locationId'})
+    // Location.hasOne(models.Program, {foreignKey: 'locationId'})
   };
   return Location;
 };

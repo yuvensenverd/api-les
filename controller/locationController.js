@@ -71,7 +71,7 @@ module.exports = {
             console.log(req.body)
             // console.log(req.params.location) 
             // console.log(req.params.category)  
-            if(location === 'Semua Lokasi' && category === 'Semua Kategori') {
+            if(location === 'Semua Venue' && category === 'Semua Kategori') {
                 let results = await Location.findAll({
                     limit,
                     offset, 
@@ -85,10 +85,10 @@ module.exports = {
                     include: [
                         {
                             model: Program,
-                            required: true,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            }
+                            // required: true,
+                            // attributes: {
+                            //     exclude: ['createdAt', 'updatedAt']
+                            // }
                         },
                         {
                             model: LocationPicture,
@@ -141,7 +141,7 @@ module.exports = {
                 if(category === 'Semua Kategori') {
                     obj = {
                         model: Program,
-                        required: true,
+                        
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         }
@@ -149,7 +149,7 @@ module.exports = {
                 } else {
                     obj = {
                         model: Program,
-                        required: true,
+                        
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         },
@@ -207,9 +207,9 @@ module.exports = {
                             ]
                         }
                     ],
-                    // where: {
-                    //     city: location === 'Semua Lokasi' ? { [Op.like] : '%%'} : location
-                    // },
+                    where: {
+                        city: location === 'Semua Venue' ? { [Op.like] : '%%'} : location
+                    },
                     order: [['id', 'DESC']]
 
 

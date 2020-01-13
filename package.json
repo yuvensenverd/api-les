@@ -23,6 +23,7 @@
     "jimp": "^0.9.3",
     "jsonwebtoken": "^8.3.0",
     "lien": "^3.3.0",
+    "lodash": "^4.17.15",
     "midtrans-client": "^1.0.4",
     "moment": "^2.24.0",
     "multer": "^1.4.2",
