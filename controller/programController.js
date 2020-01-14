@@ -204,7 +204,7 @@ module.exports = {
                 },
                 {
                     model: Location,
-                    attributes:['name'],
+                    attributes:['name', 'city'],
                 },
             ],
             order: [['id', 'DESC']]
