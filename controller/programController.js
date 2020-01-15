@@ -72,32 +72,32 @@ module.exports = {
                 language,
             } = data
 
-            classDate = classDate.replace(/\bMonday\b, /g, '');
-            classDate = classDate.replace(/\bTuesday\b, /g, '');
-            classDate = classDate.replace(/\bWednesday\b, /g, '');
-            classDate = classDate.replace(/\bThursday\b, /g, '');
-            classDate = classDate.replace(/\bFriday\b, /g, '');
-            classDate = classDate.replace(/\bSaturday\b, /g, '');
-            classDate = classDate.replace(/\bSunday\b, /g, '');
+            // classDate = classDate.replace(/\bMonday\b, /g, '');
+            // classDate = classDate.replace(/\bTuesday\b, /g, '');
+            // classDate = classDate.replace(/\bWednesday\b, /g, '');
+            // classDate = classDate.replace(/\bThursday\b, /g, '');
+            // classDate = classDate.replace(/\bFriday\b, /g, '');
+            // classDate = classDate.replace(/\bSaturday\b, /g, '');
+            // classDate = classDate.replace(/\bSunday\b, /g, '');
 
-            startDateReg = startDateReg.replace(/\bMonday\b, /g, '');
-            startDateReg = startDateReg.replace(/\bTuesday\b, /g, '');
-            startDateReg = startDateReg.replace(/\bWednesday\b, /g, '');
-            startDateReg = startDateReg.replace(/\bThursday\b, /g, '');
-            startDateReg = startDateReg.replace(/\bFriday\b, /g, '');
-            startDateReg = startDateReg.replace(/\bSaturday\b, /g, '');
-            startDateReg = startDateReg.replace(/\bSunday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bMonday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bTuesday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bWednesday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bThursday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bFriday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bSaturday\b, /g, '');
+            // startDateReg = startDateReg.replace(/\bSunday\b, /g, '');
 
-            endDateReg = endDateReg.replace(/\bMonday\b, /g, '');
-            endDateReg = endDateReg.replace(/\bTuesday\b, /g, '');
-            endDateReg = endDateReg.replace(/\bWednesday\b, /g, '');
-            endDateReg = endDateReg.replace(/\bThursday\b, /g, '');
-            endDateReg = endDateReg.replace(/\bFriday\b, /g, '');
-            endDateReg = endDateReg.replace(/\bSaturday\b, /g, '');
-            endDateReg = endDateReg.replace(/\bSunday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bMonday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bTuesday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bWednesday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bThursday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bFriday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bSaturday\b, /g, '');
+            // endDateReg = endDateReg.replace(/\bSunday\b, /g, '');
 
             // let languages = language.join('|')
-
+            // return null
             return sequelize.transaction(function (t){
                 return Program.create({
                     name,
@@ -126,8 +126,8 @@ module.exports = {
                 },{transaction: t})
                 .then((result)=>{
                     let programId = result.dataValues.id
-                    console.log(programId)
-                    console.log(image.length)
+                    // console.log(programId)
+                    // console.log(image.length)
                     let listImage = [];
                     for(let i=0; i < image.length; i++){
                         const imagePath = path + '/' + image[i].filename
@@ -135,10 +135,10 @@ module.exports = {
                             programId,
                             imagePath
                         })
-                        listgambar.push(imagePath)
+                        // listgambar.push(imagePath)
                     }
-                    console.log(listImage)
-                    programpicture.bulkCreate({listImage},{transaction: t})
+                    console.log('===============================> image program ', listImage)
+                    return programpicture.bulkCreate(listImage, {transaction: t})
                     .then((result2) => {
                         // console.log(result2)
                         // return res.status(200).send({message: 'success', result: result2})
@@ -150,34 +150,34 @@ module.exports = {
                             })
                         }
                         console.log('===============================> lecturerlist ',lecturerList)
-                        LecturerProgram.bulkCreate({lecturerList},{transaction: t})
+                        return LecturerProgram.bulkCreate(lecturerList, {transaction: t})
                         .then((resultx)=>{
-                            console.log(lecturer)
-                            console.log(classDate)
+                            console.log(resultx)
                             let scheduleList = []
-                            console.log(classDate.length)
                             for(let y = 0; y < classDate.length; y++){
-                                console.log("didalam for", classDate[y].startDate)
                                 scheduleList.push({
                                     programId,
-                                    startDate: clasDate[y].startDate,
-                                    startTime: clasDate[y].startTime,
-                                    endTime: clasDate[y].endTime
+                                    startDate: classDate[y].startDate,
+                                    startTime: classDate[y].startTime,
+                                    endTime: classDate[y].endTime
                                 })
-                                console.log(scheduleList)
                             }
-                            Schedule.bulkCreate({scheduleList},{transaction: t})
-                            console.log('---------------------------------------------> ', scheduleList)
+                            console.log('---------------------------------------------> schedule : \n ', scheduleList)
+                            return Schedule.bulkCreate(scheduleList, {transaction: t})
                             .then((result4) => {
                                 console.log('sukses')
-                                return res.status(200).send('data success di simpan')
+                                console.log(result4)
+                                // return res.status(200).send({msg: 'data success di simpan', results: result4})
                             })
                             .catch((err)=>{
-                                return res.status(500).send(err)
+                                // console.log(err)
+                                // return res.  status(500).send(err)
+                                throw new Error()
                             })
                         })
                         .catch((err)=>{
-                            return res.status(500).send(err)
+                            // return res.status(500).send(err)
+                            throw new Error()
                         })
                     })
                     .catch((err)=>{
@@ -185,33 +185,45 @@ module.exports = {
                             
                             fs.unlinkSync('./public' + listgambar[i]);
                         }
-                        // console.log(err)
-                        return res.status(500).send({message: 'error', err})
+                        console.log(err)
+                        // return res.status(500).send({message: 'error', err})
+                        throw new Error()
                     })
                     
                     
                     .catch((err)=>{
-                        // console.log(err)
-                        return res.status(500).send({ message : 'error', err})
+                        console.log(err)
+                        // return res.status(500).send({ message : 'error', err})
+                        throw new Error()
                     })
                 }).catch((err) => {
                     for(let i = 0; i < listgambar.length; i = i + 1) {
                             
                         fs.unlinkSync('./public' + listgambar[i]);
                     }
-                    return res.status(500).send({ message : "there's an error" , err })
+                    // return res.status(500).send({ message : "there's an error" , err })
+                    throw new Error()
                 })
+            })
+            .then((resultz)=>{
+                console.log(resultz)
+                return res.status(200).send(resultz)
+            })
+            .catch((err) =>{
+                console.log(err)
             })
         })
     },
     getProgram: (req, res)=>{
         // console.log( moment(new Date(), ["MM-DD-YYYY", "YYYY-MM-DD"]).format())
+        console.log('-------------------------------------------------------------------------> get program', req.body)
         let limit = req.body.limit ? req.body.limit : 1000
         let offset = req.body.offset ? req.body.offset : 0
-        let categorySelected = req.body.category ? req.body.category : ''
-        let dateSelected = req.body.dateSelected ? req.body.dateSelected : sequelize.fn('NOW') // BLM BENER FORMAT DATENYA
-        console.log(dateSelected)
-        let citySelected = req.body.citySelected ? req.body.citySelected : ''
+        let categorySelected = req.body.category ? `%${ req.body.category}%` : '%%'
+        let dateSelected = req.body.dateSelected ? `%${req.body.dateSelected}%` : '%%' // BLM BENER FORMAT DATENYA
+        // let dateSelected = ''
+        console.log(typeof(dateSelected))
+        let citySelected = req.body.citySelected ? `%${req.body.citySelected}%` : '%%'
         // let getCategory = !req.body.categoryId ? {[Op.like] : ''} : {[Op.in] : req.body.categoryId}
 
 
@@ -223,6 +235,7 @@ module.exports = {
             offset:offset,
             
             include : [
+               
                 {
                     model : programpicture,
                     attributes: ['programId', 'imagePath']
@@ -239,32 +252,62 @@ module.exports = {
                 },
                 {
                     model: Location,
-                    attributes:['name'],
+                    attributes:['name', 'city'],
+                    // required: true,
                     where : {
                         city : {
                             [Op.like] : citySelected
                         }
                     }
+                },
+                {
+                    model : Schedule,
+                    subQuery: false,
+                    separate: true,
+                    attributes : ['id','programId','startDate','startTime','endTime'],
+                    // required: true,
+                    where : {
+                        startDate : {
+                            // [Op.gte] : new Date('2020-01-15') // FORMAT DATENYA SISA DIBENERIN OKEE
+                            [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
+                        }
+                    },
+                    limit: 1,
+                    order: [['id','ASC']],
+                    // include : {
+                    //     model : Program,
+                    //     attributes: {
+                    //         exclude: ['createdAt','updatedAt']
+                    //     },
+                    //     include:{
+                    //         model: Location,
+                    //         attributes:['name', 'city'],
+                    //         required: true,
+                    //         where : {
+                    //             city : {
+                    //                 [Op.like] : citySelected
+                    //             }
+                    //         } 
+                    //     },
+                    //     where : {
+                    //         category : {
+                    //             [Op.like] : categorySelected
+                    //         },
+                    //     },
+                    // }
                 }
-                // {
-                //     model : Schedule,
-                //     attributes : [],
-                //     where : {
-                //         startDate : {
-                //             [Op.gte] : '2020-1-07' // FORMAT DATENYA SISA DIBENERIN OKEE
-                //         }
-                //     }
-                // }
             ],
             where : {
                 category : {
-                    [Op.like] : '%%'
-                }
+                    [Op.like] : categorySelected
+                },
             },
-            order: [['id', 'DESC']]
+            order: [['id', 'DESC']],
+     
+
         })
         .then((result1) => {
-            console.log(result1)
+            // console.log(result1)
             return res.status(200).send(result1)
         })
         .catch((err)=> {
@@ -301,6 +344,10 @@ module.exports = {
                 {
                     model: Room,
                     attributes: ['roomName']
+                },
+                {
+                    model: Schedule,
+                    attributes: ['startDate', 'startTime', 'endTime']
                 }
             ],
             where:{
