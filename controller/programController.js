@@ -302,7 +302,7 @@ module.exports = {
                 },
                 {
                     model: Location,
-                    attributes: ['name'],
+                    attributes: ['name', 'city'],
                 },
             ],
             where: {

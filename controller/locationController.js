@@ -146,12 +146,12 @@ module.exports = {
                 } else {
                     obj = {
                         model: Program,
-                        
+                        required: true,
                         attributes: {
                             exclude: ['createdAt', 'updatedAt']
                         },
                         where: {
-                            category
+                            category: category.replace(' ', '')
                         }
                     }
                 }
