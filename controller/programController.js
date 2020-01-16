@@ -260,42 +260,20 @@ module.exports = {
                         }
                     }
                 },
-                {
-                    model : Schedule,
-                    subQuery: false,
-                    separate: true,
-                    attributes : ['id','programId','startDate','startTime','endTime'],
-                    // required: true,
-                    where : {
-                        startDate : {
-                            // [Op.gte] : new Date('2020-01-15') // FORMAT DATENYA SISA DIBENERIN OKEE
-                            [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
-                        }
-                    },
-                    limit: 1,
-                    order: [['id','ASC']],
-                    // include : {
-                    //     model : Program,
-                    //     attributes: {
-                    //         exclude: ['createdAt','updatedAt']
-                    //     },
-                    //     include:{
-                    //         model: Location,
-                    //         attributes:['name', 'city'],
-                    //         required: true,
-                    //         where : {
-                    //             city : {
-                    //                 [Op.like] : citySelected
-                    //             }
-                    //         } 
-                    //     },
-                    //     where : {
-                    //         category : {
-                    //             [Op.like] : categorySelected
-                    //         },
-                    //     },
-                    // }
-                }
+                // {
+                //     model : Schedule,
+                //     subQuery: false,
+                //     separate: true,
+                //     attributes : ['id','programId','startDate','startTime','endTime'],
+                //     // required: true,
+                //     where : {
+                //         startDate : {
+                //             [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
+                //         }
+                //     },
+                //     limit: 1,
+                //     order: [['id','ASC']],
+                // }
             ],
             where : {
                 category : {
