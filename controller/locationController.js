@@ -67,15 +67,15 @@ module.exports = {
     getAll : async (req,res) =>{
         // console.log(req.body)
         try{
-            let {location, category, limit, offset, page} = req.body
+            let {location, category, limit, offset} = req.body
             // console.log(req.body)
             // console.log(req.params.location) 
             // console.log(req.params.category)  
             if(location === 'Semua Venue' && category === 'Semua Kategori') {
-                let results = await Location.findAll({
+                let results = await Location.findAndCountAll({
                     limit,
                     offset, 
-                    page,
+                    distinct: true,
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                         // include : [
@@ -130,8 +130,9 @@ module.exports = {
 
 
                 })
+                console.log('Query hasil findAll and Coun')
                 console.log(results)
-                return res.status(200).send({ message: 'success get', results, total: Math.ceil(results.length / limit) })
+                return res.status(200).send({ message: 'success get', results: results.rows, total: results.count})
             
             } else {
                 let obj;
@@ -156,10 +157,10 @@ module.exports = {
                     }
                 }
 
-                let results = await Location.findAll({
+                let results = await Location.findAndCountAll({
                     limit,
                     offset,
-                    page,
+                    distinct: true,
                     attributes: {
                         exclude: ['createdAt', 'updatedAt'],
                         // include : [
@@ -212,7 +213,7 @@ module.exports = {
 
                 })
                 console.log(results)
-                return res.status(200).send({ message: 'success get', results, total: Math.ceil(results.length / limit)  })
+                return res.status(200).send({ message: 'success get', results: results.rows, total: results.count  })
             } 
         }
 
