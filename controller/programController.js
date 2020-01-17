@@ -260,20 +260,20 @@ module.exports = {
                         }
                     }
                 },
-                // {
-                //     model : Schedule,
-                //     subQuery: false,
-                //     separate: true,
-                //     attributes : ['id','programId','startDate','startTime','endTime'],
-                //     // required: true,
-                //     where : {
-                //         startDate : {
-                //             [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
-                //         }
-                //     },
-                //     limit: 1,
-                //     order: [['id','ASC']],
-                // }
+                {
+                    model : Schedule,
+                    // subQuery: false,
+                    separate: true,
+                    attributes : ['id','programId','startDate','startTime','endTime'],
+                    // required: true,
+                    // where : {
+                    //     startDate : {
+                    //         [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
+                    //     }
+                    // },
+                    // limit: 1,
+                    order: [['id','ASC']],
+                }
             ],
             where : {
                 category : {
@@ -286,7 +286,59 @@ module.exports = {
         })
         .then((result1) => {
             // console.log(result1)
-            return res.status(200).send(result1)
+            Program.count({
+                distinct: true,
+                include : [
+               
+                    {
+                        model : programpicture,
+                        attributes: ['programId', 'imagePath']
+                    },
+                    {
+                        model : Lecturer,
+                        attributes: {
+                            exclude: ['createdAt','updatedAt']
+                        },
+                        through: {
+                            model: LecturerProgram,
+                            attributes: [],
+                        }
+                    },
+                    {
+                        model: Location,
+                        attributes:['name', 'city'],
+                        // required: true,
+                        where : {
+                            city : {
+                                [Op.like] : citySelected
+                            }
+                        }
+                    },
+                    // {
+                        // model : Schedule,
+                        // subQuery: false,
+                        // separate: true,
+                        // attributes : ['id','programId','startDate','startTime','endTime'],
+                        // required: true,
+                        // where : {
+                        //     startDate : {
+                        //         [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
+                        //     }
+                        // },
+                        // limit: 1,
+                        // order: [['id','ASC']],
+                    // }
+                ],
+                where : {
+                    category : {
+                        [Op.like] : categorySelected
+                    },
+                },
+            })
+            .then((result2)=>{
+                console.log(result2)
+                return res.status(200).send({results: result1, count: result2})
+            })
         })
         .catch((err)=> {
             console.log(err)
