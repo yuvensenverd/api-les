@@ -220,9 +220,9 @@ module.exports = {
         let limit = req.body.limit ? req.body.limit : 1000
         let offset = req.body.offset ? req.body.offset : 0
         let categorySelected = req.body.category ? `%${ req.body.category}%` : '%%'
-        let dateSelected = req.body.dateSelected ? `%${req.body.dateSelected}%` : '%%' // BLM BENER FORMAT DATENYA
+        let dateSelected = req.body.dateSelected ? `${req.body.dateSelected}` : '' // BLM BENER FORMAT DATENYA
         // let dateSelected = ''
-        console.log(typeof(dateSelected))
+        console.log('INI YAA- ---------------------> ', dateSelected)
         let citySelected = req.body.citySelected ? `%${req.body.citySelected}%` : '%%'
         // let getCategory = !req.body.categoryId ? {[Op.like] : ''} : {[Op.in] : req.body.categoryId}
 
@@ -233,7 +233,6 @@ module.exports = {
             },
             limit:parseInt(limit),
             offset:offset,
-            
             include : [
                
                 {
@@ -263,16 +262,16 @@ module.exports = {
                 {
                     model : Schedule,
                     // subQuery: false,
-                    separate: true,
+                    // separate: true,
                     attributes : ['id','programId','startDate','startTime','endTime'],
                     // required: true,
-                    // where : {
-                    //     startDate : {
-                    //         [Op.gte]:moment(dateSelected, "YYYY-MM-DD")
-                    //     }
-                    // },
+                    where : {
+                        startDate : {
+                            [Op.gte]:dateSelected
+                        }
+                    },
                     // limit: 1,
-                    order: [['id','ASC']],
+                    // order: [['id','ASC']],
                 }
             ],
             where : {
