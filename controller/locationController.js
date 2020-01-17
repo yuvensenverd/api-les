@@ -135,6 +135,9 @@ module.exports = {
                 return res.status(200).send({ message: 'success get', results: results.rows, total: results.count})
             
             } else {
+                console.log('========================= masuk ')
+                let {location, category, limit, offset, page} = req.body
+                console.log(req.body)
                 let obj;
                 if(category === 'Semua Kategori') {
                     obj = {
@@ -285,7 +288,7 @@ module.exports = {
 
     showAvailableCity: (req, res) => {
         Location.findAll({
-            attributes: ['city'],
+            attributes: ['id','city'],
             group: ['city']
         })
             .then((results) => {

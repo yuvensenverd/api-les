@@ -10,7 +10,7 @@ router.get('/', (req, res) =>
 );
 
 router.post('/add', programController.createClass)
-router.get('/getAll', programController.getProgram)
+router.post('/getAll', programController.getProgram)
 router.get('/filterClass/:slug', programController.getFilteredClass)
 router.post('/getOne', programController.getSelectedProgram)
 router.post('/filter', programController.getByFilter)
