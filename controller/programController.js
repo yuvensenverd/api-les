@@ -220,12 +220,13 @@ module.exports = {
         let limit = req.body.limit ? req.body.limit : 1000
         let offset = req.body.offset ? req.body.offset : 0
         let categorySelected = req.body.category ? `%${ req.body.category}%` : '%%'
-        let dateSelected = req.body.dateSelected ? `${req.body.dateSelected}` : '' // BLM BENER FORMAT DATENYA
+        let dateSelected = req.body.dateSelected ? `${req.body.dateSelected}` : moment().format('YYYY-MM-DD hh:mm:ss') // BLM BENER FORMAT DATENYA
         // let dateSelected = ''
         console.log('INI YAA- ---------------------> ', dateSelected)
         let citySelected = req.body.citySelected ? `%${req.body.citySelected}%` : '%%'
         // let getCategory = !req.body.categoryId ? {[Op.like] : ''} : {[Op.in] : req.body.categoryId}
 
+        console.log(dateSelected)
 
         Program.findAll({
             attributes:{
