@@ -138,6 +138,10 @@ module.exports = {
                 console.log('========================= masuk ')
                 let {location, category, limit, offset, page} = req.body
                 console.log(req.body)
+                category = category.split('')
+                console.log('hasil category')
+                category.pop()
+                // console.log(category.join(''))
                 let obj;
                 if(category === 'Semua Kategori') {
                     obj = {
@@ -155,7 +159,7 @@ module.exports = {
                             exclude: ['createdAt', 'updatedAt']
                         },
                         where: {
-                            category: category.split('').splice(category.length - 1, 1).join('')
+                            category: category.join('')
                         }
                     }
                 }
