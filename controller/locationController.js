@@ -138,9 +138,7 @@ module.exports = {
                 console.log('========================= masuk ')
                 let {location, category, limit, offset, page} = req.body
                 console.log(req.body)
-                category = category.split('')
-                console.log('hasil category')
-                category.pop()
+                
                 // console.log(category.join(''))
                 let obj;
                 if(category === 'Semua Kategori') {
@@ -152,6 +150,9 @@ module.exports = {
                         }
                     }
                 } else {
+                    category = category.split('')
+                    console.log('hasil category')
+                    category.pop()
                     obj = {
                         model: Program,
                         required: true,
