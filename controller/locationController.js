@@ -287,13 +287,13 @@ module.exports = {
     },
 
     showAvailableCity: (req, res) => {
-        Location.findAll({
-            attributes: ['id','city'],
-            group: ['city']
-        })
+        Location.aggregate('city', 'DISTINCT', { plain: false })
             .then((results) => {
+                console.log('Haloooooo ini adalah hasil data kota yg ada di database')
+                console.log(results)
                 // console.log('Provinsi Murid')
-                let data = results.map(results => results.city)
+                let data = results.map(results => results.DISTINCT)
+                console.log(data)
 
                 return res.status(200).send(data)
             })
