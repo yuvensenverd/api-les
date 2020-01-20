@@ -155,7 +155,7 @@ module.exports = {
                             exclude: ['createdAt', 'updatedAt']
                         },
                         where: {
-                            category: category.replace(' ', '')
+                            category: category.split('').splice(category.length - 1, 1).join('')
                         }
                     }
                 }
