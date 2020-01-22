@@ -79,7 +79,8 @@ module.exports = {
         type: Sequelize.TEXT
       },
       pageView: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       isCancelled: {
         type: Sequelize.INTEGER

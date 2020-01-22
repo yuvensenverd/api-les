@@ -14,5 +14,6 @@ router.post('/getAll', programController.getProgram)
 router.get('/filterClass/:slug', programController.getFilteredClass)
 router.post('/getOne', programController.getSelectedProgram)
 router.post('/filter', programController.getByFilter)
+router.post('/addPageView', programController.addPageViewProgram)
 
 module.exports = router;

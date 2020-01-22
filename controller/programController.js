@@ -484,6 +484,26 @@ module.exports = {
                 return res.status(500).send({ status: 'error', message: err })
             })
     }, 
+
+    addPageViewProgram: (req, res) => {
+        console.log(req.body)
+        Program.update(
+            {
+            pageView: req.body.pageView,
+            },
+            {
+                where:{
+                    slug : req.body.slug
+                }
+            }
+        )
+        .then((result) => {
+            return res.status(200).send(result)
+        }).catch((error)=>{
+            console.log(error)
+            return res.status(500).send({ message : 'theres an error ', error })
+        })
+    }
     
     
 }
