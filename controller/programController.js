@@ -159,7 +159,8 @@ module.exports = {
                                     programId,
                                     startDate: classDate[y].startDate,
                                     startTime: classDate[y].startTime,
-                                    endTime: classDate[y].endTime
+                                    endTime: classDate[y].endTime,
+                                    description: classDate[y].description
                                 })
                             }
                             console.log('---------------------------------------------> schedule : \n ', scheduleList)
