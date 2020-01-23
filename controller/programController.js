@@ -121,6 +121,7 @@ module.exports = {
                     priceInclusive,
                     toPrepare,
                     programOutome: outCome,
+                    pageView: 0,
                     // classDate,
                     slug: `${slug}-${encryptId}`,
                 },{transaction: t})
@@ -280,7 +281,7 @@ module.exports = {
                     [Op.like] : categorySelected
                 },
             },
-            order: [['id', 'DESC']],
+            order: [['pageView', 'DESC']],
      
 
         })
