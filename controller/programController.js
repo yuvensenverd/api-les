@@ -47,6 +47,7 @@ module.exports = {
             const data = JSON.parse(req.body.data)
             console.log('----------------------------------------------------------------------------------->>> data')
             console.log(data)
+            
 
             let {
                 category,
@@ -71,7 +72,7 @@ module.exports = {
                 slug,
                 language,
             } = data
-
+            console.log(classDate[0].startDate)
             // classDate = classDate.replace(/\bMonday\b, /g, '');
             // classDate = classDate.replace(/\bTuesday\b, /g, '');
             // classDate = classDate.replace(/\bWednesday\b, /g, '');
@@ -121,7 +122,7 @@ module.exports = {
                     priceInclusive,
                     toPrepare,
                     programOutome: outCome,
-                    // classDate,
+                    classDate: moment(classDate[0].startDate).format("YYYY-MM-DD HH:mm:ss"),
                     slug: `${slug}-${encryptId}`,
                 },{transaction: t})
                 .then((result)=>{
@@ -221,7 +222,7 @@ module.exports = {
         let limit = req.body.limit ? req.body.limit : 1000
         let offset = req.body.offset ? req.body.offset : 0
         let categorySelected = req.body.category ? `%${ req.body.category}%` : '%%'
-        let dateSelected = req.body.dateSelected ? `${req.body.dateSelected}` : moment().format('YYYY-MM-DD hh:mm:ss') // BLM BENER FORMAT DATENYA
+        let dateSelected = req.body.dateSelected ? `${req.body.dateSelected}` : '1000-01-01 00:00:00' // BLM BENER FORMAT DATENYA
         // let dateSelected = ''
         console.log('INI YAA- ---------------------> ', dateSelected)
         let citySelected = req.body.citySelected ? `%${req.body.citySelected}%` : '%%'
@@ -267,11 +268,11 @@ module.exports = {
                     // separate: true,
                     attributes : ['id','programId','startDate','startTime','endTime'],
                     // required: true,
-                    where : {
-                        startDate : {
-                            [Op.gte]:dateSelected
-                        }
-                    },
+                    // where : {
+                    //     startDate : {
+                    //         [Op.gte]:dateSelected
+                    //     }
+                    // },
                     // limit: 1,
                     // order: [['id','ASC']],
                 }
@@ -280,6 +281,9 @@ module.exports = {
                 category : {
                     [Op.like] : categorySelected
                 },
+                classDate: {
+                    [Op.gte]: dateSelected
+                }
             },
             order: [['id', 'DESC']],
      
@@ -334,6 +338,9 @@ module.exports = {
                     category : {
                         [Op.like] : categorySelected
                     },
+                    classDate: {
+                        [Op.gte] : dateSelected
+                    }
                 },
             })
             .then((result2)=>{
