@@ -288,8 +288,6 @@ module.exports = {
                 }
             },
             order: [['pageView', 'DESC']],
-     
-
         })
         .then((result1) => {
             // console.log(result1)
@@ -387,7 +385,7 @@ module.exports = {
                 },
                 {
                     model: Schedule,
-                    attributes: ['startDate', 'startTime', 'endTime']
+                    attributes: ['startDate', 'startTime', 'endTime', 'description']
                 }
             ],
             where:{
