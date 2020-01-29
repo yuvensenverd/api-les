@@ -127,6 +127,9 @@ module.exports = {
                             ]
                         }
                     ],
+                    where: {
+                        isVisibility: 0
+                    },
                     order: [['id', 'DESC']]
 
 
@@ -216,7 +219,7 @@ module.exports = {
                     ],
                     where: {
                         city: location === 'Semua Venue' ? { [Op.like] : '%%'} : location,
-                        isVisibility: 1
+                        isVisibility: 0
                     },
                     order: [['id', 'DESC']]
 

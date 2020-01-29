@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     googleMapName : DataTypes.STRING,
     googleMapEmbed : DataTypes.INTEGER,
     description : DataTypes.STRING,
-    slug : DataTypes.STRING
+    slug : DataTypes.STRING,
+    isVisibility: DataTypes.INTEGER
   }, {});
   Location.associate = function(models) {
     // associations can be defined here
