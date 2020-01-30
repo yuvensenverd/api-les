@@ -169,6 +169,7 @@ module.exports = {
                 },
                 {
                     returning: true,
+                    plain: true,
                     where:
                      {
                          id,
@@ -176,13 +177,32 @@ module.exports = {
                      }
                 }
               ).then((results)=>{
-                  console.log('ini dreuslts')
-                  const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+                //   console.log('ini dreuslts')
+                //   const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
                     // console.log(results)
-                    delete result.dataValues.password
-                    return res.status(200).send({
-                        message : 'success', results : result.dataValues, token : tokenJwt
-                    });
+                    // delete result.dataValues.password
+                    // console.log('ini adalah update user ketika sudah verifikasi email')
+                    // console.log(result.dataValues.isVerified)
+                    
+                    // return res.status(200).send({
+                    //     message : 'success', results : result.dataValues, token : tokenJwt
+                    // });
+                    User.findOne({
+                        where: {email}
+                    }).then((newResult) => {
+                        console.log('ini dreuslts')
+                        console.log(newResult.dataValues)
+                        const tokenJwt = createJWTToken({ id: newResult.dataValues.id, email: newResult.dataValues.email })
+                    // console.log(results)
+                        delete newResult.dataValues.password
+                    // console.log('ini adalah update user ketika sudah verifikasi email')
+                    // console.log(result.dataValues.isVerified)
+                    
+                        return res.status(200).send({
+                            message : 'success', results : newResult.dataValues, token : tokenJwt
+                        });
+
+                    })
               }).catch((errors)=>{
                 console.log(errors)
                 return res.status(500).send({message : 'theres an error', errors })
@@ -201,7 +221,7 @@ module.exports = {
 
         const {
             token
-        } = req.body        
+        } = req.body  
 
         let linkVerifikasi = `${UI_LINK}/verification?tkn=${token}`;
                         
