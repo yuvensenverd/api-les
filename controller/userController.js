@@ -142,6 +142,11 @@ module.exports = {
         })
         .then((result) => {
             const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+           
+            delete result.dataValues.password
+            delete result.dataValues.googleId,
+            delete result.dataValues.facebookId
+            
             return res.status(200).send({
                 result: result.dataValues, 
                 token: tokenJwt
@@ -628,4 +633,48 @@ module.exports = {
 
         return res.status(200).send(email)
     },
+
+    addUserData: (req, res) => {
+        // console.log(req.user)
+        // console.log(req.body)
+        const { 
+            firstName,
+            lastName,
+            email,
+            phone,
+            jenis_kelamin,
+            tanggalLahir,
+            address,
+            company,
+            domisili
+         } = req.body
+
+        User.update(
+            {
+                firstName,
+                lastName,
+                email,
+                phone,
+                jenis_kelamin,
+                tanggalLahir,
+                alamat: address,
+                perusahaan: company,
+                domisili
+            },
+            {
+                where: {
+                    id: req.user.id,
+                    email: req.user.email
+                }
+            }
+        ).then((result) => {
+            return res.status(200).send({
+                message : 'success'
+            });
+        })
+        .catch((err) => {
+            console.log(error)
+            return res.status(500).send({message : 'theres an error', error })
+        })
+    }
 }
