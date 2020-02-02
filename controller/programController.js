@@ -377,7 +377,7 @@ module.exports = {
                 },
                 {
                     model: Location,
-                    attributes:['name', 'address', 'googleMapName', 'googleMapEmbed'],
+                    attributes:['id','name', 'address', 'googleMapName', 'googleMapEmbed'],
                 },
                 {
                     model: Room,
