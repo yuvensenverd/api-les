@@ -11,6 +11,18 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER
       },
+      programId: {
+        type: Sequelize.INTEGER
+      },
+      venueId: {
+        type: Sequelize.INTEGER
+      },
+      quantity: {
+        type: Sequelize.INTEGER
+      },
+      statusPembayaran: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
