@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     Program.belongsTo(models.Location, { foreignKey: 'locationId'})
     Program.belongsTo(models.Room, { foreignKey: 'roomId'})
     Program.hasMany(models.Schedule, {foreignKey: 'programId'})
+    Program.hasMany(models.BookingOrder, { foreignKey: 'programId'})
   };
   return Program;
 };

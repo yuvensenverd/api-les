@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     Location.hasMany(models.Program, {foreignKey: 'locationId'})
     Location.hasMany(models.LocationPicture, {foreignKey : 'locationId'})
     Location.hasMany(models.Room, {foreignKey : 'locationId'})
+    Location.hasMany(models.BookingOrder, { foreignKey: 'vanueId'})
     // Location.hasOne(models.Program, {foreignKey: 'locationId'})
   };
   return Location;

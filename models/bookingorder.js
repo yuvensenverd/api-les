@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   BookingOrder.associate = function(models) {
     // associations can be defined here
+    BookingOrder.belongsTo(models.User, { foreignKey: 'userId'})
+    BookingOrder.belongsTo(models.Program, { foreignKey: 'programId'})
+    BookingOrder.belongsTo(models.Location, {foreignKey: 'venueId'})
   };
   return BookingOrder;
 };
