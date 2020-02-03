@@ -8,7 +8,8 @@ module.exports = {
             
             let results = await Location.findOne({
                 where:{
-                    slug: req.params.slug
+                    slug: req.params.slug,
+                    isVisibility: 0
                 },
                 attributes: {
                     exclude : ['createdAt', 'updatedAt'],
@@ -126,6 +127,9 @@ module.exports = {
                             ]
                         }
                     ],
+                    where: {
+                        isVisibility: 0
+                    },
                     order: [['id', 'DESC']]
 
 
@@ -214,7 +218,8 @@ module.exports = {
                         }
                     ],
                     where: {
-                        city: location === 'Semua Venue' ? { [Op.like] : '%%'} : location
+                        city: location === 'Semua Venue' ? { [Op.like] : '%%'} : location,
+                        isVisibility: 0
                     },
                     order: [['id', 'DESC']]
 

@@ -122,6 +122,8 @@ module.exports = {
                     priceInclusive,
                     toPrepare,
                     programOutome: outCome,
+                    pageView: 0,
+                    // classDate,
                     classDate: moment(classDate[0].startDate).format("YYYY-MM-DD HH:mm:ss"),
                     slug: `${slug}-${encryptId}`,
                 },{transaction: t})
@@ -285,9 +287,7 @@ module.exports = {
                     [Op.gte]: dateSelected
                 }
             },
-            order: [['id', 'DESC']],
-     
-
+            order: [['pageView', 'DESC']],
         })
         .then((result1) => {
             // console.log(result1)
@@ -377,7 +377,7 @@ module.exports = {
                 },
                 {
                     model: Location,
-                    attributes:['name', 'address', 'googleMapName', 'googleMapEmbed'],
+                    attributes:['id','name', 'address', 'googleMapName', 'googleMapEmbed'],
                 },
                 {
                     model: Room,
@@ -385,7 +385,7 @@ module.exports = {
                 },
                 {
                     model: Schedule,
-                    attributes: ['startDate', 'startTime', 'endTime']
+                    attributes: ['startDate', 'startTime', 'endTime', 'description']
                 }
             ],
             where:{

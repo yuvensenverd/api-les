@@ -20,4 +20,6 @@ router.post('/sendTokenReset', userController.sendResetPasswordToken);
 router.get('/verifyResetToken', resetToken, userController.userCheckResetToken);
 router.post('/newPasswordUser', resetToken, userController.userResetPassword);
 
+router.post('/addUserData', auth, userController.addUserData);
+
 module.exports = router

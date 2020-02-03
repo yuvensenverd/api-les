@@ -142,6 +142,11 @@ module.exports = {
         })
         .then((result) => {
             const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+           
+            delete result.dataValues.password
+            delete result.dataValues.googleId,
+            delete result.dataValues.facebookId
+            
             return res.status(200).send({
                 result: result.dataValues, 
                 token: tokenJwt
@@ -169,6 +174,7 @@ module.exports = {
                 },
                 {
                     returning: true,
+                    plain: true,
                     where:
                      {
                          id,
@@ -176,13 +182,32 @@ module.exports = {
                      }
                 }
               ).then((results)=>{
-                  console.log('ini dreuslts')
-                  const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
+                //   console.log('ini dreuslts')
+                //   const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
                     // console.log(results)
-                    delete result.dataValues.password
-                    return res.status(200).send({
-                        message : 'success', results : result.dataValues, token : tokenJwt
-                    });
+                    // delete result.dataValues.password
+                    // console.log('ini adalah update user ketika sudah verifikasi email')
+                    // console.log(result.dataValues.isVerified)
+                    
+                    // return res.status(200).send({
+                    //     message : 'success', results : result.dataValues, token : tokenJwt
+                    // });
+                    User.findOne({
+                        where: {email}
+                    }).then((newResult) => {
+                        console.log('ini dreuslts')
+                        console.log(newResult.dataValues)
+                        const tokenJwt = createJWTToken({ id: newResult.dataValues.id, email: newResult.dataValues.email })
+                    // console.log(results)
+                        delete newResult.dataValues.password
+                    // console.log('ini adalah update user ketika sudah verifikasi email')
+                    // console.log(result.dataValues.isVerified)
+                    
+                        return res.status(200).send({
+                            message : 'success', results : newResult.dataValues, token : tokenJwt
+                        });
+
+                    })
               }).catch((errors)=>{
                 console.log(errors)
                 return res.status(500).send({message : 'theres an error', errors })
@@ -201,7 +226,7 @@ module.exports = {
 
         const {
             token
-        } = req.body        
+        } = req.body  
 
         let linkVerifikasi = `${UI_LINK}/verification?tkn=${token}`;
                         
@@ -608,4 +633,48 @@ module.exports = {
 
         return res.status(200).send(email)
     },
+
+    addUserData: (req, res) => {
+        // console.log(req.user)
+        // console.log(req.body)
+        const { 
+            firstName,
+            lastName,
+            email,
+            phone,
+            jenis_kelamin,
+            tanggalLahir,
+            address,
+            company,
+            domisili
+         } = req.body
+
+        User.update(
+            {
+                firstName,
+                lastName,
+                email,
+                phone,
+                jenis_kelamin,
+                tanggalLahir,
+                alamat: address,
+                perusahaan: company,
+                domisili
+            },
+            {
+                where: {
+                    id: req.user.id,
+                    email: req.user.email
+                }
+            }
+        ).then((result) => {
+            return res.status(200).send({
+                message : 'success'
+            });
+        })
+        .catch((err) => {
+            console.log(error)
+            return res.status(500).send({message : 'theres an error', error })
+        })
+    }
 }
