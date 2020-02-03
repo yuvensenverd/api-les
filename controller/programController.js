@@ -270,7 +270,7 @@ module.exports = {
                     model : Schedule,
                     // subQuery: false,
                     // separate: true,
-                    attributes : ['id','programId','startDate','startTime','endTime'],
+                    attributes : ['id','programId','startDate','startTime','endTime', 'description'],
                     // required: true,
                     // where : {
                     //     startDate : {
