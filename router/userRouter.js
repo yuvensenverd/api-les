@@ -21,5 +21,6 @@ router.get('/verifyResetToken', resetToken, userController.userCheckResetToken);
 router.post('/newPasswordUser', resetToken, userController.userResetPassword);
 
 router.post('/addUserData', auth, userController.addUserData);
+router.post('/changePassword', auth, userController.changeUserPassword);
 
 module.exports = router

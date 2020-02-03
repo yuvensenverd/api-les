@@ -126,7 +126,7 @@ module.exports = {
                 })
             })
             .catch((err) => {
-                return res.status(500).send({message : 'theres an error', error : `Email tidak terdaftar. Harap Daftar/Sign Up terlebih dahulu ` })
+                return res.status(500).send({message : 'theres an error', error : `Email atau Password yang anda masukkan salah. ` })
             })
         })
         .catch((err) => {
@@ -286,7 +286,7 @@ module.exports = {
                 // Kalo sudah pernah mendaftar dengan email google, dan user ingin mencoba
                 // login lewat gmail, maka muncul errornya
 
-                const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
+                const tokenJwt = createJWTToken({ id: results.dataValues.id, email: results.dataValues.email })
 
                         // console.log(dataUser.id)
 
@@ -320,7 +320,7 @@ module.exports = {
                 // Kalo sudah pernah mendaftar dengan email google, dan user ingin mencoba
                 // login lewat gmail, maka muncul errornya
 
-                const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
+                const tokenJwt = createJWTToken({ id: results.dataValues.id, email: results.dataValues.email })
 
                         // console.log(dataUser.id)
 
@@ -374,7 +374,7 @@ module.exports = {
                 .then((results) => {
 
                     console.log(results.dataValues)
-                        const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
+                        const tokenJwt = createJWTToken({ id: results.dataValues.id, email: results.dataValues.email })
 
                         return res.status(200).send({
                             result: results.dataValues,
@@ -429,7 +429,7 @@ module.exports = {
                 .then((results) => {
 
                     console.log(results.dataValues)
-                        const tokenJwt = createJWTToken({ userId: results.dataValues.id, email: results.dataValues.email })
+                        const tokenJwt = createJWTToken({ id: results.dataValues.id, email: results.dataValues.email })
 
                         return res.status(200).send({
                             result: results.dataValues,
@@ -532,7 +532,7 @@ module.exports = {
                     return res.status(500).send({ status: 'facebookTrue', message: `Silahkan Login with Facebook dengan Email = ${req.body.email}` })
                 }
 
-                const tokenPassword = createForgotPasswordToken({ userId: result.dataValues.id, email: result.dataValues.email })
+                const tokenPassword = createForgotPasswordToken({ id: result.dataValues.id, email: result.dataValues.email })
 
                 let linkVerifikasi = `${UI_LINK}/verify-reset?token=${tokenPassword}`;
                                 
@@ -675,6 +675,60 @@ module.exports = {
         .catch((err) => {
             console.log(error)
             return res.status(500).send({message : 'theres an error', error })
+        })
+    }, 
+
+    changeUserPassword: (req, res) => {
+
+        console.log(req.body)
+
+        let { 
+            password,
+            newPassword,
+            newConfPassword
+        } = req.body
+
+        const { 
+            id,
+            email
+        } = req.user
+
+        let old_password =  Crypto.createHmac('sha256', 'ngelesapi').update(password).digest('hex')
+        newPassword =  Crypto.createHmac('sha256', 'ngelesapi').update(newPassword).digest('hex')
+
+        // const {
+
+        // } = req.body
+
+        User.findOne({
+            where: {
+                email,
+                password: old_password
+            }
+        })
+        .then((results) => {
+            if(results) {
+                User.update({
+                    password: newPassword
+
+                }, 
+                {
+                    where: {
+                        email
+                    }
+                })
+                .then((lastResults) => {
+                    return res.status(200).send(results)
+                })
+                .catch((err) => {
+                    return res.status(500).json({ message: "There's an error on the server. Please contact the administrator.", error: err.message });
+                })
+            } else {
+                return res.status(500).json({ message: "Password Lama Anda Salah", error: err.message });
+            }
+        })
+        .catch((err) => {
+            return res.status(500).json({ message: "Password Lama Anda Salah", error: err.message });
         })
     }
 }

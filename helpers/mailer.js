@@ -43,7 +43,7 @@ module.exports = {
 
                 // setup email data with unicode symbols
                 let mailOptions = {
-                    from: 'rajabaklaut <operational@ngeles.co>' , // sender address
+                    from: 'Admin ngeles.co <operational@ngeles.co>' , // sender address
                     to: to, // 'mailnameh@domain.com', // list of receivers
                     subject: subject, // 'Hello ✔', // Subject line
                     html: htmlToSend || '', // html body
@@ -91,5 +91,4 @@ module.exports = {
             },
             logger : true
     })
-    
 };
