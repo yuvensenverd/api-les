@@ -141,6 +141,7 @@ module.exports = {
             }
         })
         .then((result) => {
+            console.log('\---===---===---===---===>>>',result)
             const tokenJwt = createJWTToken({ id: result.dataValues.id, email: result.dataValues.email })
            
             delete result.dataValues.password
@@ -648,6 +649,8 @@ module.exports = {
             company,
             domisili
          } = req.body
+         console.log(req.body)
+         console.log(req.user)
 
         User.update(
             {
@@ -663,7 +666,7 @@ module.exports = {
             },
             {
                 where: {
-                    id: req.user.id,
+                    id: req.user.userId,
                     email: req.user.email
                 }
             }
@@ -673,8 +676,8 @@ module.exports = {
             });
         })
         .catch((err) => {
-            console.log(error)
-            return res.status(500).send({message : 'theres an error', error })
+            console.log(err)
+            return res.status(500).send({message : 'theres an error', err })
         })
     }
 }

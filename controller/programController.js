@@ -1,4 +1,4 @@
-const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room, Category, Schedule} = require('../models')
+const { Program, Lecturer, sequelize, Sequelize, programpicture, LecturerProgram, Location, Room, Category, Schedule, BookingOrder} = require('../models')
 const Op = Sequelize.Op;
 const { uploader } = require('../helpers/uploader')
 const { URL_API } = require('../helpers/urlapi')
@@ -8,6 +8,8 @@ var path = require('path')
 var mime = require('mime')
 const moment = require('moment')
 const fs = require('fs')
+const {transporter} = require('../helpers/mailer')
+const numeral = require('numeral')
 
 module.exports = {
     createClass : async(req, res) => {
@@ -511,6 +513,120 @@ module.exports = {
             console.log(error)
             return res.status(500).send({ message : 'theres an error ', error })
         })
+    },
+
+    bookingClass: (req, res) => {
+        console.log('==================== booking Class =============')
+        console.log(req)
+        console.log(req.body)
+        const {
+            programId,
+            venueId,
+            quantity,
+            nama,
+            namaKelas,
+            price,
+            jenis_kelamin,
+            domisili,
+            phone,
+            schedule,
+        } = req.body
+        const {
+            id,
+            email
+        } = req.user
+
+        // if(schedule.length > 0){
+            // let schedules = schedule.map((val, i) => {
+            //     return (
+            //         // console.log(val)
+            //         <div></div>
+            //         // <td> Sesi {i+1} : {moment(val.startDate).format('DD-MMM-YY')} - {moment(val.endDate).format('DD-MMM-YY')} Pukul : {moment(val.startTime, 'HH:mm').format('HH:mm')} - {moment(val.endTime, 'HH:mm').format('HH:mm')} | {val.description}</td>
+            //     )
+                
+            // })
+            let schedules= ''
+
+            for(let i=0; i<schedule.length; i++){
+                schedules += `<tr><td> Sesi ${i+1} : ${moment(schedule[i].startDate).format('DD-MMM-YY')} - ${moment(schedule[i].endDate).format('DD-MMM-YY')} Pukul : ${moment(schedule[i].startTime, 'HH:mm').format('HH:mm')} - ${moment(schedule[i].endTime, 'HH:mm').format('HH:mm')} | ${schedule[i].description}</td></tr>`
+            }
+            console.log(schedules)
+            console.log(schedule.length)
+// 
+        // }
+
+        BookingOrder.create({
+            userId: id,
+            programId,
+            venueId,
+            quantity,
+        })
+
+        .then((result)=>{
+            res.status(200).send({message: 'success', results: result})
+            let mailOptions = {
+                from: 'ngeles.co Admin <operational@ngeles.co>',
+                    to: email,
+                    subject: `New inquiry from ${nama}`,
+                    html: `
+                            <div>
+                            
+                                <table>
+                                    <tr><th  align="left" style="border-bottom: 1px solid black;">Detail Peserta</th></tr>
+                                    <tr>
+                                        <th align="left" width="30%">Nama</th><td>: ${nama}</td>
+                                    </tr>
+                                    <tr>
+                                        <th align="left">No. Telepon</th><td>: ${phone}</td>
+                                    </tr>
+                                    <tr>
+                                        <th align="left">Email</th><td>: ${email}</td>
+                                    </tr>
+                                    <tr>
+                                        <th align="left">Jenis Kelamin</th><td>: ${jenis_kelamin}</td>
+                                    </tr>
+                                    <tr>
+                                        <th align="left">Domisili</th><td>: ${domisili}</td>
+                                    </tr>
+                                    <tr><td><span style="color:#fff;">.</span></td></tr>
+                                    <tr><th align="left" style="border-bottom: 1px solid black;">Detail Pesanan</th></tr>
+                                    <tr>
+                                        <th align="left">Nama Kelas</th><td>: ${namaKelas}</td>
+                                    </tr>
+                                    <tr>
+                                        <th align="left">Pax</th><td>: ${quantity}</td>
+                                    </tr>
+                                    <tr>
+                                        <th align="left" valign="top" rowspan=${schedule.length+1}>Schedule</th>
+                                    </tr>
+                                    ${schedules}
+                                    <tr>
+                                        <th align="left">Total Harga</th><td>: Rp. ${numeral(quantity*price).format(0,0)}</td>
+                                    </tr>
+                                </table>
+                                <hr />
+                            </div>`
+            }
+
+            transporter.sendMail(mailOptions, (err1, res1) => {
+                if (err1) {
+                    console.log(err1)
+                    return res.status(500).send({ status: 'error', err: err1 })
+                }
+                console.log('succ!?')
+                console.log(res1)
+
+                return res.status(200).send({
+                    result: results
+                });
+
+            })
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+
+
     }
     
     

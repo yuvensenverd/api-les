@@ -6,6 +6,7 @@ const payment = require('./paymentRouter')
 const locationRouter = require('./locationRouter')
 const programRouter = require('./programRouter');
 const lecturerRouter = require('./lecturerRouter')
+const bookingOrderRouter = require('./bookingOrderRouter')
 
 
 module.exports = {
@@ -16,5 +17,6 @@ module.exports = {
     payment,
     locationRouter,
     programRouter,
-    lecturerRouter
+    lecturerRouter,
+    bookingOrderRouter
 }
