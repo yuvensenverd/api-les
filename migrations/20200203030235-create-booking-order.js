@@ -33,7 +33,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       statusPembayaran: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'On Hold'
       },
       createdAt: {
         allowNull: false,

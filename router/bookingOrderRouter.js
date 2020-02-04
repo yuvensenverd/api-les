@@ -10,8 +10,8 @@ router.get('/', (req, res) =>
   }),
 );
 
-router.post('/bookingClass', auth, bookingOrderController.bookingClass)
-router.get('/getall', bookingOrderController.getAll)
-router.post('/getbyuser', bookingOrderController.getByUser)
+router.post('/bookingClass', auth, bookingOrderController.bookingClass);
+router.get('/getall', bookingOrderController.getAll);
+router.post('/getbyuser', auth, bookingOrderController.getByUser);
 
 module.exports = router;
