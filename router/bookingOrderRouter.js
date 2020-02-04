@@ -12,5 +12,6 @@ router.get('/', (req, res) =>
 
 router.post('/bookingClass', auth, bookingOrderController.bookingClass)
 router.get('/getall', bookingOrderController.getAll)
+router.post('/getbyuser', bookingOrderController.getByUser)
 
 module.exports = router;
