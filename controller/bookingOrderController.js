@@ -37,7 +37,7 @@ module.exports = {
 
         let schedules= ''
         for(let i=0; i<schedule.length; i++){
-            schedules += `<tr><td> Sesi ${i+1} : ${moment(schedule[i].startDate).format('DD-MMM-YY')} - ${moment(schedule[i].endDate).format('DD-MMM-YY')} Pukul : ${moment(schedule[i].startTime, 'HH:mm').format('HH:mm')} - ${moment(schedule[i].endTime, 'HH:mm').format('HH:mm')} | ${schedule[i].description}</td></tr>`
+            schedules += `<tr><td> Sesi ${i+1} : ${moment(schedule[i].startDate).format('DD-MMM-YY')}  Pukul : ${moment(schedule[i].startTime, 'HH:mm').format('HH:mm')} - ${moment(schedule[i].endTime, 'HH:mm').format('HH:mm')} | ${schedule[i].description}</td></tr>`
         }
 
         BookingOrder.create({
@@ -111,6 +111,7 @@ module.exports = {
         })
     },
     getAll: (req, res)=>{
+        console.log('=================================================== get all boking order ==================================================')
         BookingOrder.findAll({
             attributes: {
                 exclude: ['updateAt']
@@ -135,6 +136,48 @@ module.exports = {
                     }
                 }
             ]
+        })
+        .then((result1)=>{
+            res.status(200).send({message: 'success', results: result1})
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    },
+    getByUser: (req, res)=>{
+        console.log('=================================================== get all boking order ==================================================')
+        let userId = req.body.userId
+        let statusPembayaran = req.body.status ? req.body.status : null
+        BookingOrder.findAll({
+            attributes: {
+                exclude: ['updateAt']
+            },
+            include: [
+                {
+                    model: User,
+                    attributes:{
+                        exclude: ['createdAt','updatedAt']
+                    }
+                },
+                {
+                    model: Location,
+                    attributes: {
+                        exclude: ['createdAt','updatedAt']
+                    }
+                },
+                {
+                    model: Program,
+                    attributes:{
+                        exclude: ['createdAt','updatedAt']
+                    }
+                }
+            ],
+            where: {
+                userId,
+                statusPembayaran
+            },
+            order: [['createdAt', 'DESC']]
+            
         })
         .then((result1)=>{
             res.status(200).send({message: 'success', results: result1})
