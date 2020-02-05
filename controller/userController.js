@@ -715,7 +715,6 @@ module.exports = {
         const { 
             firstName,
             lastName,
-            email,
             phone,
             jenis_kelamin,
             tanggalLahir,
@@ -730,7 +729,6 @@ module.exports = {
             {
                 firstName,
                 lastName,
-                email,
                 phone,
                 jenis_kelamin,
                 tanggalLahir,
