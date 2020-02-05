@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     endDate: DataTypes.DATE,
     startTime: DataTypes.TIME,
     endTime: DataTypes.TIME,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    price: DataTypes.INTEGER,
   }, {});
   Schedule.associate = function(models) {
     // associations can be defined here

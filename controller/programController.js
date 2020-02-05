@@ -165,7 +165,8 @@ module.exports = {
                                     startDate: classDate[y].startDate,
                                     startTime: classDate[y].startTime,
                                     endTime: classDate[y].endTime,
-                                    description: classDate[y].description
+                                    description: classDate[y].description,
+                                    price: classDate[y].price
                                 })
                             }
                             console.log('---------------------------------------------> schedule : \n ', scheduleList)
@@ -387,7 +388,7 @@ module.exports = {
                 },
                 {
                     model: Schedule,
-                    attributes: ['startDate', 'startTime', 'endTime', 'description']
+                    attributes: ['id','startDate', 'startTime', 'endTime', 'description', 'price']
                 }
             ],
             where:{
