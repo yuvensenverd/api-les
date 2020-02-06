@@ -79,7 +79,8 @@ module.exports = {
                     venueId,
                     quantity,
                     kode_order: kode_order + '1',
-                    schedule_list: jsx
+                    schedule_list: jsx,
+                    price_session: price
                 })
 
                 .then((result)=>{
@@ -156,7 +157,8 @@ module.exports = {
                     venueId,
                     quantity,
                     kode_order: kode_order + `${res[0].id}`,
-                    schedule_list: jsx
+                    schedule_list: jsx,
+                    price_session: price
                 })
 
                 .then((result)=>{
