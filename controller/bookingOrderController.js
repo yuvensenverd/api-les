@@ -111,7 +111,7 @@ module.exports = {
                                             </tr>
                                             ${schedules}
                                             <tr>
-                                                <th align="left">Total Harga</th><td>: Rp. ${numeral(quantity*price).format(0,0)}</td>
+                                                <th align="left">Total Harga</th><td>: Rp. ${numeral(price).format(0,0)}</td>
                                             </tr>
                                         </table>
                                         <hr />
@@ -187,7 +187,7 @@ module.exports = {
                                             </tr>
                                             ${schedules}
                                             <tr>
-                                                <th align="left">Total Harga</th><td>: Rp. ${numeral(quantity*price).format(0,0)}</td>
+                                                <th align="left">Total Harga</th><td>: Rp. ${numeral(price).format(0,0)}</td>
                                             </tr>
                                         </table>
                                         <hr />
