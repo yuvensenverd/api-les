@@ -51,16 +51,16 @@ module.exports = {
             if(arraySchedule[i]) {
                 schedules += `<tr><td> Sesi ${i+1} : ${moment(schedule[i].startDate).format('DD-MMM-YY')}  Pukul : ${moment(schedule[i].startTime, 'HH:mm').format('HH:mm')} - ${moment(schedule[i].endTime, 'HH:mm').format('HH:mm')} | ${schedule[i].description}</td></tr>`
                 jsx.push(
-                    <div>
+                   ` <div>
                         <p className='mb-2 mb-md-3 text-danger'>
-                            Sesi {i + 1}:
+                            Sesi ${i + 1}:
                         </p>
 
                         <p className='pl-3 mb-2 mb-md-3'>
-                            - {schedule[i].description}
+                            - ${schedule[i].description}
                         </p>
 
-                    </div>
+                    </div>`
                 )
             }
         }
