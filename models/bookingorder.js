@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     quantity: DataTypes.INTEGER,
     statusPembayaran: DataTypes.STRING,
     kode_order: DataTypes.INTEGER,
-    schedule_list: DataTypes.TEXT
+    schedule_list: DataTypes.TEXT,
+    price_session: DataTypes.INTEGER,
+    bundle_type: DataTypes.STRING
   }, {});
   BookingOrder.associate = function(models) {
     // associations can be defined here
