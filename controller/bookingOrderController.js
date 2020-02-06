@@ -25,6 +25,8 @@ module.exports = {
             namaKelas,
             price,
             jenis_kelamin,
+            scheduleCheck,
+            bundle,
             domisili,
             phone,
             schedule,
@@ -41,9 +43,13 @@ module.exports = {
         // console.log(tanggal)
         // console.log(typeof(tanggal))
 
+        let arraySchedule = Object.values(scheduleCheck)
+
         let schedules= ''
-        for(let i=0; i<schedule.length; i++){
-            schedules += `<tr><td> Sesi ${i+1} : ${moment(schedule[i].startDate).format('DD-MMM-YY')}  Pukul : ${moment(schedule[i].startTime, 'HH:mm').format('HH:mm')} - ${moment(schedule[i].endTime, 'HH:mm').format('HH:mm')} | ${schedule[i].description}</td></tr>`
+        for(let i=0; i < schedule.length; i++){
+            if(arraySchedule[i]) {
+                schedules += `<tr><td> Sesi ${i+1} : ${moment(schedule[i].startDate).format('DD-MMM-YY')}  Pukul : ${moment(schedule[i].startTime, 'HH:mm').format('HH:mm')} - ${moment(schedule[i].endTime, 'HH:mm').format('HH:mm')} | ${schedule[i].description}</td></tr>`
+            }
         }
 
         BookingOrder.findAll({
@@ -96,6 +102,9 @@ module.exports = {
                                             </tr>
                                             <tr>
                                                 <th align="left">Pax</th><td>: ${quantity}</td>
+                                            </tr>
+                                            <tr>
+                                                <th align="left">Paket</th><td>: ${bundle}</td>
                                             </tr>
                                             <tr>
                                                 <th align="left" valign="top" rowspan=${schedule.length+1}>Schedule</th>
@@ -169,6 +178,9 @@ module.exports = {
                                             </tr>
                                             <tr>
                                                 <th align="left">Pax</th><td>: ${quantity}</td>
+                                            </tr>
+                                            <tr>
+                                                <th align="left">Paket</th><td>: ${bundle}</td>
                                             </tr>
                                             <tr>
                                                 <th align="left" valign="top" rowspan=${schedule.length+1}>Schedule</th>
