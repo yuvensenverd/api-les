@@ -7,6 +7,7 @@ const locationRouter = require('./locationRouter')
 const programRouter = require('./programRouter');
 const lecturerRouter = require('./lecturerRouter')
 const bookingOrderRouter = require('./bookingOrderRouter')
+const topClassHomeRouter = require('./topClassRouter');
 
 
 module.exports = {
@@ -18,5 +19,6 @@ module.exports = {
     locationRouter,
     programRouter,
     lecturerRouter,
-    bookingOrderRouter
+    bookingOrderRouter,
+    topClassHomeRouter
 }

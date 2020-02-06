@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   topClassHome.associate = function(models) {
     // associations can be defined here
+    topClassHome.belongsTo(models.Program, { foreignKey: 'programId'})
   };
   return topClassHome;
 };

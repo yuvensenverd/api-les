@@ -7,6 +7,7 @@ const locationController = require('./locationController')
 const programController = require('./programController')
 const lecturerController = require('./lecturerController')
 const bookingOrderController = require('./bookingOrderController')
+const topClassHomeController = require('./topClassController');
 
 module.exports = {
     userController,
@@ -17,5 +18,6 @@ module.exports = {
     locationController,
     programController,
     lecturerController,
-    bookingOrderController
+    bookingOrderController,
+    topClassHomeController
 }

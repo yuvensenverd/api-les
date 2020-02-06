@@ -32,7 +32,8 @@ const {
     payment,
     programRouter,
     lecturerRouter,
-    bookingOrderRouter
+    bookingOrderRouter,
+    topClassHomeRouter
 } = require('./router')
 
 
@@ -45,6 +46,7 @@ app.use('/location', locationRouter)
 app.use('/program', programRouter)
 app.use('/lecturer', lecturerRouter)
 app.use('/order', bookingOrderRouter)
+app.use('/topClass', topClassHomeRouter)
 
 
 // const accountSid = 'ACe76747951073aa1d89501f528e2f53fa';
