@@ -3,11 +3,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn('BookingOrders', 'price_session', {
-      type: Sequelize.TEXT,
+      type: Sequelize.INTEGER,
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Schedules', 'price_session');
+    return queryInterface.removeColumn('BookingOrders', 'price_session');
   }
 };

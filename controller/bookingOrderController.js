@@ -80,7 +80,8 @@ module.exports = {
                     quantity,
                     kode_order: kode_order + '1',
                     schedule_list: jsx,
-                    price_session: price
+                    price_session: price,
+                    bundle_type: bundle
                 })
 
                 .then((result)=>{
@@ -158,7 +159,8 @@ module.exports = {
                     quantity,
                     kode_order: kode_order + `${res[0].id}`,
                     schedule_list: jsx,
-                    price_session: price
+                    price_session: price,
+                    bundle_type: bundle
                 })
 
                 .then((result)=>{

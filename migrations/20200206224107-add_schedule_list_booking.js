@@ -8,6 +8,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Schedules', 'schedule_list');
+    return queryInterface.removeColumn('BookingOrders', 'schedule_list');
   }
 };
