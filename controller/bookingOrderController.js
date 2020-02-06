@@ -220,9 +220,8 @@ module.exports = {
                         console.log(res1)
 
                         return res.status(200).send({
-                            result: results
+                            message : ' success'
                         });
-
                     })
                 })
                 .catch((err)=>{

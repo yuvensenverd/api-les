@@ -58,9 +58,9 @@ module.exports = {
                     html: `
                             <div>
                                 <hr />
-                                <h4>Link Verification</h4>
-                                <p>This is a link verification for Email: <span style='font-weight:bold'>${email}</span>.</p>
-                                <p>To verification your account <a href='${linkVerifikasi}'>Click Here!</a></p>
+                                <h4>Link Verifikasi Email</h4>
+                                <p>Ini adalah link verifikasi untuk email: <span style='font-weight:bold'>${email}</span>.</p>
+                                <p>Untuk verifikasi email anda <a href='${linkVerifikasi}'>Klik disini!</a></p>
                                 <hr />
                             </div>`
                 }
@@ -239,13 +239,13 @@ module.exports = {
             to: email,
             subject: 'Verifikasi Email for NGELES.CO',
             html: `
-                    <div>
-                        <hr />
-                        <h4>Link Verification</h4>
-                        <p>This is a link verification for Email: <span style='font-weight:bold'>${email}</span>.</p>
-                        <p>To verification your account <a href='${linkVerifikasi}'>Click Here!</a></p>
-                        <hr />
-                    </div>`
+                <div>
+                    <hr />
+                    <h4>Link Verifikasi Email</h4>
+                    <p>Ini adalah link verifikasi untuk email: <span style='font-weight:bold'>${email}</span>.</p>
+                    <p>Untuk verifikasi email anda <a href='${linkVerifikasi}'>Klik disini!</a></p>
+                    <hr />
+                </div>`
         }
 
         transporter.sendMail(mailOptions, (err1, res1) => {
