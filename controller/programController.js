@@ -129,7 +129,7 @@ module.exports = {
                     classDate: moment(classDate[0].startDate).format("YYYY-MM-DD HH:mm:ss"),
                     slug: `${slug}-${encryptId}`,
                 },{transaction: t})
-                .then((result)=>{
+                .then((result) => {
                     let programId = result.dataValues.id
                     // console.log(programId)
                     // console.log(image.length)
