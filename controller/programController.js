@@ -286,9 +286,9 @@ module.exports = {
                 category : {
                     [Op.like] : categorySelected
                 },
-                classDate: {
-                    [Op.gte]: dateSelected
-                }
+                // classDate: {
+                //     [Op.gte]: dateSelected
+                // }
             },
             order: [['pageView', 'DESC']],
         })
