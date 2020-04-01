@@ -290,7 +290,7 @@ module.exports = {
                 //     [Op.gte]: dateSelected
                 // }
             },
-            order: [['pageView', 'DESC']],
+            order: [['id', 'DESC']],
         })
         .then((result1) => {
             // console.log(result1)
@@ -341,9 +341,9 @@ module.exports = {
                     category : {
                         [Op.like] : categorySelected
                     },
-                    classDate: {
-                        [Op.gte] : dateSelected
-                    }
+                    // classDate: {
+                    //     [Op.gte] : dateSelected
+                    // }
                 },
             })
             .then((result2)=>{
